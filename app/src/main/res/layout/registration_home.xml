@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".RegistrationHome">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/insideLayout">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,9 +19,22 @@
         android:textSize="20sp"
         android:id="@+id/btnRegistration"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:paddingTop="10dp"
+        android:layout_marginTop="2dp"
+        android:paddingTop="2dp"
         android:paddingLeft="10dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:text="Save"
+            android:textSize="20sp"
+            android:id="@+id/saveFormAndContinue"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:paddingTop="2dp"
+            android:paddingLeft="10dp"/>
+    </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

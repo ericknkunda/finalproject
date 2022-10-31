@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class RegistrationHome extends AppCompatActivity {
-    private Button registrationButton;
+    private Button registrationButton, saveFormData;
     private ActionBar actionBar;
 
     @Override
@@ -24,6 +24,9 @@ public class RegistrationHome extends AppCompatActivity {
         //changing the title
         setTitle("registration page");
         registrationButton=(Button) findViewById(R.id.btnRegistration);
+        saveFormData=(Button)findViewById(R.id.saveFormAndContinue);
+
+        //activating actionbar
         actionBar=getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -32,6 +35,13 @@ public class RegistrationHome extends AppCompatActivity {
             public void onClick(View view) {
                 loadRegistrationFragment(new RegistrationForm());
 
+            }
+        });
+
+        saveFormData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToDatabase();
             }
         });
 
@@ -50,6 +60,10 @@ public class RegistrationHome extends AppCompatActivity {
         FragmentTransaction transaction= manager.beginTransaction();
         transaction.replace(R.id.frameLayoutAtRegistration,fragment);
         transaction.commit();
+
+    }
+
+    public void sendToDatabase(){
 
     }
 }
