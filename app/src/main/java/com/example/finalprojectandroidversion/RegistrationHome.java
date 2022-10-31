@@ -24,7 +24,7 @@ public class RegistrationHome extends AppCompatActivity {
         //changing the title
         setTitle("registration page");
         registrationButton=(Button) findViewById(R.id.btnRegistration);
-        saveFormData=(Button)findViewById(R.id.saveFormAndContinue);
+        //saveFormData=(Button)findViewById(R.id.saveFormAndContinue);
 
         //activating actionbar
         actionBar=getSupportActionBar();
@@ -38,12 +38,12 @@ public class RegistrationHome extends AppCompatActivity {
             }
         });
 
-        saveFormData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendToDatabase();
-            }
-        });
+//        saveFormData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                sendToDatabase();
+//            }
+//        });
 
     }
     @Override

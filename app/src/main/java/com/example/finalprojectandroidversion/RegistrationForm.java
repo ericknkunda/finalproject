@@ -51,8 +51,8 @@ public class RegistrationForm extends Fragment {
         userNames= userName.getText().toString();
         phoneAddress= userPhoneNumber.getText().toString();
         userEmailAddress= userEmail.getText().toString();
-        userGender= userGenderSpinner.getSelectedItem().toString();
-        userAgeRange =userAgeRangeSpinner.getSelectedItem().toString();
+//        userGender= userGenderSpinner.getSelectedItem().toString();
+//        userAgeRange =userAgeRangeSpinner.getSelectedItem().toString();
 
         //creating a new user
         UserAttributes attributes =updateUserToPost(userNames, phoneAddress, userEmailAddress, userGender, userAgeRange);
