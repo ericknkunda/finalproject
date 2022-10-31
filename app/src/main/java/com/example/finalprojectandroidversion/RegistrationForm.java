@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 
-public class WelcomeFragment extends Fragment {
+public class RegistrationForm extends Fragment {
     private Button btnStart;
     private View view;
 
@@ -23,7 +23,7 @@ public class WelcomeFragment extends Fragment {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadFrag(new WelcomeFragment());
+                loadFrag(new RegistrationForm());
             }
         });
 

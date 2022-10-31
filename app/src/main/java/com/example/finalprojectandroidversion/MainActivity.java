@@ -2,9 +2,6 @@ package com.example.finalprojectandroidversion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadFragmentPages() {
 
-        Intent intent =new Intent(getApplicationContext(),fragmentPages.class);
+        Intent intent =new Intent(getApplicationContext(), AssuranceClass.class);
         startActivity(intent);
     }
 

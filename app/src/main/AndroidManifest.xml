@@ -25,7 +25,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".fragmentPages" android:parentActivityName=".MainActivity">
+        <activity android:name=".AssuranceClass" android:parentActivityName=".MainActivity">
         </activity>
     </application>
 
