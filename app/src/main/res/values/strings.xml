@@ -5,4 +5,13 @@
     will be sent to you. please take next steps to finish setting up you subscription</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome">Welcome to the intelligent recommender system</string>
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string-array name="age_range">
+        <item>Between 10 and 15</item>
+        <item>Between 16 and 35</item>
+        <item>Above 35</item>
+    </string-array>
 </resources>

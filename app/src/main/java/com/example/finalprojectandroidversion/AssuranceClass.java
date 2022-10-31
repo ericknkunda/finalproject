@@ -2,6 +2,8 @@ package com.example.finalprojectandroidversion;
 
 
 import androidx.fragment.app.Fragment;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +30,7 @@ public class AssuranceClass extends AppCompatActivity {
         buttonStartRegistrationForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startSubscription(new RegistrationForm());
+                startSubscription();
             }
         });
 
@@ -43,7 +45,9 @@ public class AssuranceClass extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void startSubscription(Fragment fragment){
+    public void startSubscription(){
+        Intent intent=new Intent(getApplicationContext(),RegistrationHome.class);
+        startActivity(intent);
 
     }
 }
