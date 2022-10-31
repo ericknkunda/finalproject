@@ -8,13 +8,13 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnNext1;
+    private Button btnNextToAssurancePage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnNext1=(Button) findViewById(R.id.btnNext1);
-        btnNext1.setOnClickListener(new View.OnClickListener() {
+        btnNextToAssurancePage =(Button) findViewById(R.id.btnNext1);
+        btnNextToAssurancePage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loadFragmentPages();
