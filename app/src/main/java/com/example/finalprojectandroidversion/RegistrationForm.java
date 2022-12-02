@@ -1,5 +1,7 @@
 package com.example.finalprojectandroidversion;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.app.Fragment;
@@ -14,7 +16,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 
 public class RegistrationForm extends Fragment {
@@ -30,6 +40,9 @@ public class RegistrationForm extends Fragment {
     private String userEmailAddress;
     private String userGender;
     private String userAgeRange;
+    private Button sendToDb;
+    private String server_url ="http://172.31.22.174/finalproject/db_connection.php";
+    AlertDialog.Builder builder;
 
     //a linked list to hold users
     private LinkedList<UserAttributes> user=new LinkedList<>();
@@ -46,6 +59,7 @@ public class RegistrationForm extends Fragment {
         userEmail=(EditText)view.findViewById(R.id.userEmailAddress);
         userGenderSpinner=(Spinner) view.findViewById(R.id.userGender);
         userAgeRangeSpinner=(Spinner) view.findViewById(R.id.userAgeRange);
+        sendToDb =(Button) view.findViewById(R.id.btnSend);
 
         //taking inserted attributes
         userNames= userName.getText().toString();
@@ -53,6 +67,12 @@ public class RegistrationForm extends Fragment {
         userEmailAddress= userEmail.getText().toString();
 //        userGender= userGenderSpinner.getSelectedItem().toString();
 //        userAgeRange =userAgeRangeSpinner.getSelectedItem().toString();
+        sendToDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendData();
+            }
+        });
 
         //creating a new user
         UserAttributes attributes =updateUserToPost(userNames, phoneAddress, userEmailAddress, userGender, userAgeRange);
@@ -61,15 +81,18 @@ public class RegistrationForm extends Fragment {
         populateUsersList(attributes);
 
         //populating gender spinners
-        ArrayAdapter<CharSequence> userGender =ArrayAdapter.createFromResource(getActivity(), R.array.gender, android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> userGender =ArrayAdapter.createFromResource(getActivity(),
+                R.array.gender, android.R.layout.simple_spinner_dropdown_item);
         userGender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userGenderSpinner.setAdapter(userGender);
 
         //populating ages spinner
-        ArrayAdapter<CharSequence> userAgeRange =ArrayAdapter.createFromResource(getActivity(), R.array.age_range, android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> userAgeRange =ArrayAdapter.createFromResource(getActivity(),
+                R.array.age_range, android.R.layout.simple_spinner_dropdown_item);
         userAgeRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userAgeRangeSpinner.setAdapter(userAgeRange);
         return view;
+
     }
 //    public void loadFrag(Fragment fragment){
 //        FragmentManager manager=getFragmentManager();
@@ -85,6 +108,49 @@ public class RegistrationForm extends Fragment {
     public LinkedList<UserAttributes> populateUsersList(UserAttributes userAttributes){
         this.user.add(userAttributes);
         return this.user;
+    }
+
+    public void sendData(){
+        StringRequest stringRequest =new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                builder.setTitle("Server response");
+                builder.setMessage("Response " + response);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int iter) {
+                        userName.setText("");
+                        userPhoneNumber.setText("");
+                        userEmail.setText("");
+//                        userGenderSpinner.setd;
+//                        userAgeRangeSpinner=("";
+
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            Override
+            protected Map<String,String> getParams() throws AuthFailureError{
+                Map<String,String> params=new HashMap<String,String>
+                        params.put("user name", userNames);
+                params.put("Phone ", userPhoneNumber);
+                params.put("Email ",userEmail);
+                params.put("gender ", userGender);
+                params.put("Ages ", userAgeRange);
+                return  params;
+            }
+        };
+        ClassRequestQueue.getInstance(RegistrationForm.this).addToRequestQue(stringRequest);
+
     }
 
 

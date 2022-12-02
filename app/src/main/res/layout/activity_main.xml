@@ -36,8 +36,8 @@
         android:background="@color/white"
         android:fontFamily="sans-serif"
         android:textColor="@color/black"
-        android:layout_marginTop="200dp"
-        android:layout_marginLeft="200dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="150dp"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="161dp"
         tools:layout_editor_absoluteY="504dp" />
