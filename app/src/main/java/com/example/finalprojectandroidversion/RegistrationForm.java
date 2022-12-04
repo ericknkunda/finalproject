@@ -18,9 +18,11 @@ import android.widget.Spinner;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -41,7 +43,7 @@ public class RegistrationForm extends Fragment {
     private String userGender;
     private String userAgeRange;
     private Button sendToDb;
-    private String server_url ="http://172.31.101.225/finalproject/db_connection.php";
+    private String server_url ="http://172.31.101.225/finalproject/tableIUsers.php";
     AlertDialog.Builder builder;
 
     //a linked list to hold users
@@ -60,6 +62,7 @@ public class RegistrationForm extends Fragment {
         userGenderSpinner=(Spinner) view.findViewById(R.id.userGender);
         userAgeRangeSpinner=(Spinner) view.findViewById(R.id.userAgeRange);
         sendToDb =(Button) view.findViewById(R.id.btnSend);
+        builder = new AlertDialog.Builder(getActivity());
 
         //taking inserted attributes
         userNames= userName.getText().toString();
@@ -112,8 +115,12 @@ public class RegistrationForm extends Fragment {
     }
 
     public void sendData(){
+        userNames= userName.getText().toString();
+        phoneAddress= userPhoneNumber.getText().toString();
+        userEmailAddress= userEmail.getText().toString();
         userGender= userGenderSpinner.getSelectedItem().toString();
         userAgeRange =userAgeRangeSpinner.getSelectedItem().toString();
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest =new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -141,17 +148,18 @@ public class RegistrationForm extends Fragment {
                 error.printStackTrace();
             }
         }){
-            protected Map<String,String> getParams() throws AuthFailureError{
-                Map<String,String> params=new HashMap<String,String>();
-                params.put("user name", userNames);
-                params.put("Phone ", phoneAddress);
-                params.put("Email ",userEmailAddress);
-                params.put("gender ", userGender);
-                params.put("Ages ", userAgeRange);
+            protected Map<String, String> getParams() throws AuthFailureError{
+                Map<String, String> params=new HashMap<String, String>();
+                params.put("user_name", userNames);
+                params.put("phone", phoneAddress);
+                params.put("email_address",userEmailAddress);
+                params.put("gender", userGender);
+                params.put("age_range", userAgeRange);
                 return  params;
             }
         };
-        ClassRequestQueue.getInstance(getActivity()).addToRequestQueue(stringRequest);
+        queue.add(stringRequest);
+        //ClassRequestQueue.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
     }
 }

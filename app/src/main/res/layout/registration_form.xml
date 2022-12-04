@@ -21,7 +21,7 @@
        android:layout_marginBottom="3dp"/>
    <EditText
        android:layout_width="300dp"
-       android:layout_height="50dp"
+       android:layout_height="wrap_content"
        android:id="@+id/userName"
        android:textSize="18dp"
        android:layout_marginLeft="50dp"
@@ -46,7 +46,7 @@
        android:layout_marginBottom="3dp"/>
    <EditText
        android:layout_width="300dp"
-       android:layout_height="50dp"
+       android:layout_height="wrap_content"
        android:id="@+id/userPhoneNumber"
        android:textSize="18dp"
        android:layout_marginLeft="50dp"
@@ -72,7 +72,7 @@
        android:layout_marginBottom="3dp"/>
    <EditText
        android:layout_width="300dp"
-       android:layout_height="50dp"
+       android:layout_height="wrap_content"
        android:id="@+id/userEmailAddress"
        android:textSize="18dp"
        android:layout_marginLeft="50dp"
@@ -98,7 +98,7 @@
        android:layout_marginBottom="3dp"/>
    <Spinner
        android:layout_width="300dp"
-       android:layout_height="50dp"
+       android:layout_height="wrap_content"
        android:layout_marginTop="10dp"
        android:layout_marginLeft="50dp"
        android:textAlignment="center"
@@ -119,28 +119,23 @@
        android:layout_marginTop="10dp"
        android:layout_marginBottom="3dp"/>
 
-   <Spinner
+    <Spinner
        android:layout_width="300dp"
-       android:layout_height="50dp"
+       android:layout_height="wrap_content"
        android:layout_marginTop="10dp"
        android:layout_marginLeft="50dp"
        android:textAlignment="center"
        android:fontFamily="sans-serif-black"
        android:spinnerMode="dropdown"
        android:id="@+id/userAgeRange"/>
-
    <Button
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-      android:id="@+id/btnSend"
-      android:text="send"
-      android:textAlignment="center"
-      android:fontFamily="sans-serif"
-      android:textSize="20dp"
-       android:layout_marginTop="80dp"
+       android:id="@+id/btnSend"
+       android:text="send"
+       android:textAlignment="center"
+       android:fontFamily="sans-serif"
+       android:textSize="20dp"
        android:layout_marginLeft="250dp"/>
-
-
-
 
 </LinearLayout>
