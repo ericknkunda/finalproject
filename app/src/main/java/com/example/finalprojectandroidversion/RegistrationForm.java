@@ -41,7 +41,7 @@ public class RegistrationForm extends Fragment {
     private String userGender;
     private String userAgeRange;
     private Button sendToDb;
-    private String server_url ="http://172.31.22.174/finalproject/db_connection.php";
+    private String server_url ="http://172.31.101.225/finalproject/db_connection.php";
     AlertDialog.Builder builder;
 
     //a linked list to hold users
@@ -65,16 +65,9 @@ public class RegistrationForm extends Fragment {
         userNames= userName.getText().toString();
         phoneAddress= userPhoneNumber.getText().toString();
         userEmailAddress= userEmail.getText().toString();
-//        userGender= userGenderSpinner.getSelectedItem().toString();
-//        userAgeRange =userAgeRangeSpinner.getSelectedItem().toString();
-        sendToDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendData();
-            }
-        });
 
-        //creating a new user
+
+         //creating a new user
         UserAttributes attributes =updateUserToPost(userNames, phoneAddress, userEmailAddress, userGender, userAgeRange);
 
         //adding this user to the users list
@@ -91,6 +84,14 @@ public class RegistrationForm extends Fragment {
                 R.array.age_range, android.R.layout.simple_spinner_dropdown_item);
         userAgeRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userAgeRangeSpinner.setAdapter(userAgeRange);
+
+        //Volley
+        sendToDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendData();
+            }
+        });
         return view;
 
     }
@@ -111,6 +112,8 @@ public class RegistrationForm extends Fragment {
     }
 
     public void sendData(){
+        userGender= userGenderSpinner.getSelectedItem().toString();
+        userAgeRange =userAgeRangeSpinner.getSelectedItem().toString();
         StringRequest stringRequest =new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -122,7 +125,7 @@ public class RegistrationForm extends Fragment {
                         userName.setText("");
                         userPhoneNumber.setText("");
                         userEmail.setText("");
-//                        userGenderSpinner.setd;
+//                        userGender.get;
 //                        userAgeRangeSpinner=("";
 
                     }
@@ -138,20 +141,17 @@ public class RegistrationForm extends Fragment {
                 error.printStackTrace();
             }
         }){
-            Override
             protected Map<String,String> getParams() throws AuthFailureError{
-                Map<String,String> params=new HashMap<String,String>
-                        params.put("user name", userNames);
-                params.put("Phone ", userPhoneNumber);
-                params.put("Email ",userEmail);
+                Map<String,String> params=new HashMap<String,String>();
+                params.put("user name", userNames);
+                params.put("Phone ", phoneAddress);
+                params.put("Email ",userEmailAddress);
                 params.put("gender ", userGender);
                 params.put("Ages ", userAgeRange);
                 return  params;
             }
         };
-        ClassRequestQueue.getInstance(RegistrationForm.this).addToRequestQue(stringRequest);
+        ClassRequestQueue.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
     }
-
-
 }

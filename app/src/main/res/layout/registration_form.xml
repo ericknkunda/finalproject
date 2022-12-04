@@ -137,8 +137,8 @@
       android:textAlignment="center"
       android:fontFamily="sans-serif"
       android:textSize="20dp"
-       android:layout_marginTop="100dp"
-       android:layout_marginLeft="300dp"/>
+       android:layout_marginTop="80dp"
+       android:layout_marginLeft="250dp"/>
 
 
 
