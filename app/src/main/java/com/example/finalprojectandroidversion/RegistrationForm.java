@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -43,7 +45,7 @@ public class RegistrationForm extends Fragment {
     private String userGender;
     private String userAgeRange;
     private Button sendToDb;
-    private String server_url ="http://172.31.101.225/finalproject/tableIUsers.php";
+    private String server_url ="http://192.168.0.100/finalproject/tableIUsers.php";
     AlertDialog.Builder builder;
 
     //a linked list to hold users
@@ -89,12 +91,8 @@ public class RegistrationForm extends Fragment {
         userAgeRangeSpinner.setAdapter(userAgeRange);
 
         //Volley
-        sendToDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendData();
-            }
-        });
+        sendToDb.setOnClickListener(view -> sendData());
+
         return view;
 
     }
@@ -114,52 +112,49 @@ public class RegistrationForm extends Fragment {
         return this.user;
     }
 
-    public void sendData(){
-        userNames= userName.getText().toString();
-        phoneAddress= userPhoneNumber.getText().toString();
-        userEmailAddress= userEmail.getText().toString();
-        userGender= userGenderSpinner.getSelectedItem().toString();
-        userAgeRange =userAgeRangeSpinner.getSelectedItem().toString();
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        StringRequest stringRequest =new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+    public void sendData() {
+        //getting values
+        userNames = userName.getText().toString();
+        phoneAddress = userPhoneNumber.getText().toString();
+        userEmailAddress = userEmail.getText().toString();
+        userGender = userGenderSpinner.getSelectedItem().toString();
+        userAgeRange = userAgeRangeSpinner.getSelectedItem().toString();
+
+        if (userNames.isEmpty() || phoneAddress.isEmpty()
+                || userEmailAddress.isEmpty() || userGender.equals("Select")||userAgeRange.equals("Select")) {
+            Toast.makeText(getActivity(), "Some fields are empty", Toast.LENGTH_LONG).show();
+            //System.exit(1);
+        } else {
+            //RequestQueue queue = Volley.newRequestQueue(getActivity());
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, response -> {
                 builder.setTitle("Server response");
                 builder.setMessage("Response " + response);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int iter) {
-                        userName.setText("");
-                        userPhoneNumber.setText("");
-                        userEmail.setText("");
+                builder.setPositiveButton("OK", (dialogInterface, iter) -> {
+                    userName.setText("");
+                    userPhoneNumber.setText("");
+                    userEmail.setText("");
 //                        userGender.get;
 //                        userAgeRangeSpinner=("";
 
-                    }
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
-            }
-        }
-                , new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-            protected Map<String, String> getParams() throws AuthFailureError{
-                Map<String, String> params=new HashMap<String, String>();
-                params.put("user_name", userNames);
-                params.put("phone", phoneAddress);
-                params.put("email_address",userEmailAddress);
-                params.put("gender", userGender);
-                params.put("age_range", userAgeRange);
-                return  params;
-            }
-        };
-        queue.add(stringRequest);
-        //ClassRequestQueue.getInstance(getActivity()).addToRequestQueue(stringRequest);
+            }, Throwable::printStackTrace) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("user_name", userNames);
+                    params.put("phone", phoneAddress);
+                    params.put("email_address", userEmailAddress);
+                    params.put("gender", userGender);
+                    params.put("age_range", userAgeRange);
+                    Log.i(getActivity().getLocalClassName(), "" + params);
+                    return params;
+                }
+            };
+            //queue.add(stringRequest);
+            ClassRequestQueue.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
+        }
     }
 }

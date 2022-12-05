@@ -30,7 +30,8 @@
        android:background="@android:color/transparent"
        android:layout_marginTop="10dp"
        android:layout_marginBottom="3dp"
-       android:hint="preferred username "/>
+       android:hint="preferred username "
+       android:inputType="text|textAutoCorrect"/>
 
    <TextView
        android:layout_width="match_parent"
@@ -78,11 +79,11 @@
        android:layout_marginLeft="50dp"
        android:paddingLeft="10dp"
        android:textStyle="italic"
-       android:inputType="textEmailAddress"
+       android:inputType="textEmailAddress|textAutoCorrect"
        android:layout_marginTop="10dp"
        android:background="@android:color/transparent"
        android:layout_marginBottom="3dp"
-       android:hint="Your Email address"/>
+       android:hint="Your Email address" />
 
    <TextView
        android:layout_width="match_parent"
