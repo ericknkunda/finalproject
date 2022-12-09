@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -11,15 +12,22 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/net_sec_config"
         android:roundIcon="@mipmap/ic_launcher_round"
-       android:networkSecurityConfig="@xml/net_sec_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProjectAndroidVersion"
         tools:targetApi="31">
         <activity
-            android:name=".RegistrationHome"
-            android:parentActivityName=".AssuranceClass"
+            android:name=".CulturalComponentsList"
             android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".RegistrationHome"
+            android:exported="false"
+            android:parentActivityName=".AssuranceClass">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -39,7 +47,7 @@
         </activity>
         <activity
             android:name=".AssuranceClass"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
     </application>
+
 </manifest>

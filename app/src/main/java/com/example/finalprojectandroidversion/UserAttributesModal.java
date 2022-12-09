@@ -1,6 +1,6 @@
 package com.example.finalprojectandroidversion;
 
-public class UserAttributes {
+public class UserAttributesModal {
     private int userId;
     private String userNames;
     private String phoneAddress;
@@ -8,10 +8,10 @@ public class UserAttributes {
     private String userGender;
     private String userAgeRange;
 
-    public UserAttributes() {
+    public UserAttributesModal() {
     }
 
-    public UserAttributes(int userId, String userNames, String phoneAddress, String userEmailAddress, String userGender, String userAgeRange) {
+    public UserAttributesModal(int userId, String userNames, String phoneAddress, String userEmailAddress, String userGender, String userAgeRange) {
         this.userId = userId;
         this.userNames = userNames;
         this.phoneAddress = phoneAddress;
@@ -20,7 +20,7 @@ public class UserAttributes {
         this.userAgeRange = userAgeRange;
     }
 
-    public UserAttributes(String userNames, String phoneAddress, String userEmailAddress, String userGender, String userAgeRange) {
+    public UserAttributesModal(String userNames, String phoneAddress, String userEmailAddress, String userGender, String userAgeRange) {
         this.userNames = userNames;
         this.phoneAddress = phoneAddress;
         this.userEmailAddress = userEmailAddress;

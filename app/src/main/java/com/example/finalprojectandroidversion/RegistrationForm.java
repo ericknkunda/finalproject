@@ -1,12 +1,10 @@
 package com.example.finalprojectandroidversion;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,13 +16,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -49,7 +42,7 @@ public class RegistrationForm extends Fragment {
     AlertDialog.Builder builder;
 
     //a linked list to hold users
-    private LinkedList<UserAttributes> user=new LinkedList<>();
+    private LinkedList<UserAttributesModal> user=new LinkedList<>();
 
 
     @Override
@@ -73,7 +66,7 @@ public class RegistrationForm extends Fragment {
 
 
          //creating a new user
-        UserAttributes attributes =updateUserToPost(userNames, phoneAddress, userEmailAddress, userGender, userAgeRange);
+        UserAttributesModal attributes =updateUserToPost(userNames, phoneAddress, userEmailAddress, userGender, userAgeRange);
 
         //adding this user to the users list
         populateUsersList(attributes);
@@ -91,7 +84,10 @@ public class RegistrationForm extends Fragment {
         userAgeRangeSpinner.setAdapter(userAgeRange);
 
         //Volley
-        sendToDb.setOnClickListener(view -> sendData());
+        sendToDb.setOnClickListener(view -> {
+            sendData();
+            selectPreference();
+        });
 
         return view;
 
@@ -102,12 +98,12 @@ public class RegistrationForm extends Fragment {
 //        transaction.replace(R.id.homeframelayout,fragment);
 //        transaction.commit();
 //    }
-    public UserAttributes updateUserToPost(String name, String phone, String email, String gender, String age){
-        UserAttributes userAttributes =new UserAttributes(name, phone, email, gender, age);
+    public UserAttributesModal updateUserToPost(String name, String phone, String email, String gender, String age){
+        UserAttributesModal userAttributes =new UserAttributesModal(name, phone, email, gender, age);
         return userAttributes;
     }
 
-    public LinkedList<UserAttributes> populateUsersList(UserAttributes userAttributes){
+    public LinkedList<UserAttributesModal> populateUsersList(UserAttributesModal userAttributes){
         this.user.add(userAttributes);
         return this.user;
     }
@@ -156,5 +152,10 @@ public class RegistrationForm extends Fragment {
             ClassRequestQueue.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
         }
+    }
+    public void selectPreference(){
+        Intent intent =new Intent(getActivity(),CulturalComponentsList.class);
+        startActivity(intent);
+
     }
 }
