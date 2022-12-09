@@ -38,7 +38,7 @@ public class RegistrationForm extends Fragment {
     private String userGender;
     private String userAgeRange;
     private Button sendToDb;
-    private String server_url ="http://192.168.0.100/finalproject/tableIUsers.php";
+    private String server_url ="http://172.31.101.225/finalproject/apis/tableIUsers.php";
     AlertDialog.Builder builder;
 
     //a linked list to hold users
@@ -86,6 +86,7 @@ public class RegistrationForm extends Fragment {
         //Volley
         sendToDb.setOnClickListener(view -> {
             sendData();
+            Toast.makeText(getActivity(),"Congulatulations",Toast.LENGTH_LONG).show();
             selectPreference();
         });
 
@@ -152,6 +153,7 @@ public class RegistrationForm extends Fragment {
             ClassRequestQueue.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
         }
+        //return  void;
     }
     public void selectPreference(){
         Intent intent =new Intent(getActivity(),CulturalComponentsList.class);

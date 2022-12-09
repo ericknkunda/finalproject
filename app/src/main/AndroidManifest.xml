@@ -33,7 +33,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".intelligentRecommenderSystem"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +47,7 @@
         </activity>
         <activity
             android:name=".AssuranceClass"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".intelligentRecommenderSystem"></activity>
     </application>
 
 </manifest>

@@ -1,18 +1,23 @@
 package com.example.finalprojectandroidversion;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CulturalComponentsAdapter extends RecyclerView.Adapter<CulturalComponentsAdapter.CulturalComponentsHolder> {
 
     private List<CulturalComponentModal> modalList;
+    private Context context;
 
     public CulturalComponentsAdapter(List<CulturalComponentModal> modalList) {
         this.modalList = modalList;
@@ -30,19 +35,41 @@ public class CulturalComponentsAdapter extends RecyclerView.Adapter<CulturalComp
     @Override
     public void onBindViewHolder(@NonNull CulturalComponentsAdapter.CulturalComponentsHolder holder, int position) {
         CulturalComponentModal modal=modalList.get(position);
-        holder.componentName.setText(modal.getComponentName());
+       String className =modal.getComponentName();
+        holder.box.setText(className);
     }
 
     @Override
     public int getItemCount() {
         return modalList.size();
     }
-    static class CulturalComponentsHolder extends RecyclerView.ViewHolder{
+     class CulturalComponentsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView componentName;
+        private CheckBox box;
+        private  List<String> componentsList;
 
         public CulturalComponentsHolder(@NonNull View itemView) {
             super(itemView);
-            this.componentName=(TextView) itemView.findViewById(R.id.componentName);
+            itemView.setOnClickListener(this);
+            //this.componentName=(TextView) itemView.findViewById(R.id.componentName);
+            this.box =(CheckBox) itemView.findViewById(R.id.userChoice);
+            this.box.setOnClickListener(this);
+            this.componentsList=new ArrayList<>();
         }
+
+        @Override
+        public void onClick(View view){
+            int position =this.getAdapterPosition();
+            CulturalComponentModal componentModal =modalList.get(position);
+            String value =box.getText().toString();
+            Toast.makeText(view.getContext(),value,Toast.LENGTH_LONG).show();
+            addPreferences(value);
+
+        }
+         public List<String> addPreferences(String value){
+             componentsList.add(value);
+             return componentsList;
+         }
     }
+
 }
