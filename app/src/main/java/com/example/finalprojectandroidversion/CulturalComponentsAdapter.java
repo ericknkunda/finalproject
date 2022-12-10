@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CulturalComponentsAdapter extends RecyclerView.Adapter<CulturalComponentsAdapter.CulturalComponentsHolder> {
 
-    private List<CulturalComponentModal> modalList;
+    private static  List<CulturalComponentModal> modalList;
     private Context context;
 
     public CulturalComponentsAdapter(List<CulturalComponentModal> modalList) {
@@ -43,10 +43,14 @@ public class CulturalComponentsAdapter extends RecyclerView.Adapter<CulturalComp
     public int getItemCount() {
         return modalList.size();
     }
-     class CulturalComponentsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    //holder class
+     static class CulturalComponentsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView componentName;
         private CheckBox box;
-        private  List<String> componentsList;
+
+        //list to hold cliked preferences
+        private  static List<String> componentsList;
 
         public CulturalComponentsHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,10 +70,15 @@ public class CulturalComponentsAdapter extends RecyclerView.Adapter<CulturalComp
             addPreferences(value);
 
         }
-         public List<String> addPreferences(String value){
+         public void addPreferences(String value){
              componentsList.add(value);
-             return componentsList;
+//             return componentsList;
          }
+
+         //getting the list
+        public static List<String> preferencesList(){
+            return  CulturalComponentsHolder.componentsList;
+        }
     }
 
 }

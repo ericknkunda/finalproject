@@ -27,8 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,9 +38,10 @@ public class CulturalComponentsList extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CulturalComponentsAdapter componentsAdapter;
     private ActionBar actionBar;
-    private String apiUrl ="http://172.31.101.225/finalproject/apis/Select_Cultural_Components.php";
-    private String preferencesUrl ="http://172.31.101.225/finalproject/apis/save_profile.php";
-    private String regIdApi ="http://172.31.101.225/finalproject/apis/last_registration_id.php";
+    private String apiUrl ="http://192.168.0.104/finalproject/apis/Select_Cultural_Components.php";
+    private String preferencesUrl ="http://192.168.0.104/finalproject/apis/save_profile.php";
+    private String regIdApi ="http://192.168.0.104/finalproject/apis/last_registration_id.php";
+    private String getPreferenceApi="http://192.168.0.104/finalproject/apis/save_preferences.php";
     AlertDialog.Builder builder;
     private Button preferencesBtn;
 
@@ -62,7 +61,10 @@ public class CulturalComponentsList extends AppCompatActivity {
         preferencesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postPreferences();
+
+                recordUserProfile();
+                Toast.makeText(CulturalComponentsList.this,"Profile Recorded",Toast.LENGTH_SHORT).show();
+                recordUserPreferences();
             }
         });
     }
@@ -76,7 +78,7 @@ public class CulturalComponentsList extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void loadUrl(){
-
+        //requesting cultural components from databse
         StringRequest stringRequest =new StringRequest(Request.Method.GET,apiUrl, new Response.Listener<String>(){
             @Override
             public void onResponse(String response) {
@@ -106,8 +108,8 @@ public class CulturalComponentsList extends AppCompatActivity {
         });
         Volley.newRequestQueue(this).add(stringRequest);
     }
-
-    public void postPreferences(){
+        //recording user profile id
+    public void recordUserProfile(){
         //RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
         StringRequest stringRequest=new StringRequest(Request.Method.POST, preferencesUrl, new Response.Listener<String>() {
             @Override
@@ -143,6 +145,10 @@ public class CulturalComponentsList extends AppCompatActivity {
         };
         Volley.newRequestQueue(this).add(stringRequest);
     }
+
+
+    //selecting the last registration to use it in linking user
+    //profiles with registration
     int registration;
     public int getRegid() {
         StringRequest request = new StringRequest(Request.Method.GET, regIdApi, new Response.Listener<String>() {
@@ -174,4 +180,42 @@ public class CulturalComponentsList extends AppCompatActivity {
         //Toast.makeText(CulturalComponentsList.this,"Registration: "+registration,Toast.LENGTH_LONG).show();
         return registration;
     }
+
+    //recording user preferences
+    public void recordUserPreferences() {
+        StringRequest request = new StringRequest(Request.Method.POST, getPreferenceApi, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Error message
+                Toast.makeText(CulturalComponentsList.this, "Error occured", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date();
+                List<String> preferences =  CulturalComponentsAdapter.CulturalComponentsHolder.preferencesList();
+                Map<String,String> params =new HashMap<>();
+                for(int i=0; i<preferences.size(); i++){
+                    params.put("profile_id","1");
+                    params.put("item_class",preferences.get(i));
+                    params.put("date_of_addition",formatter.format(date));
+                    //checking id preferences list is not empty
+                    Log.d("Preference:",preferences.get(i));
+
+                }
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(request);
+    }
+
+
+
 }
