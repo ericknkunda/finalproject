@@ -38,7 +38,7 @@ public class RegistrationForm extends Fragment {
     private String userGender;
     private String userAgeRange;
     private Button sendToDb;
-    private String server_url ="http://192.168.0.104/finalproject/apis/tableIUsers.php";
+    private String server_url ="http://172.31.101.225/finalproject/apis/tableIUsers.php";
     AlertDialog.Builder builder;
 
     //a linked list to hold users

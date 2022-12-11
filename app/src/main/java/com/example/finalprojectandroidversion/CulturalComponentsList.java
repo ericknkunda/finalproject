@@ -1,14 +1,12 @@
 package com.example.finalprojectandroidversion;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,6 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -37,13 +36,17 @@ public class CulturalComponentsList extends AppCompatActivity {
     private List<CulturalComponentModal> modalList;
     private RecyclerView recyclerView;
     private CulturalComponentsAdapter componentsAdapter;
+    private  boolean isRequestEmpty, isPreferenceRequestEmpty;
     private ActionBar actionBar;
-    private String apiUrl ="http://192.168.0.104/finalproject/apis/Select_Cultural_Components.php";
-    private String preferencesUrl ="http://192.168.0.104/finalproject/apis/save_profile.php";
-    private String regIdApi ="http://192.168.0.104/finalproject/apis/last_registration_id.php";
-    private String getPreferenceApi="http://192.168.0.104/finalproject/apis/save_preferences.php";
-    AlertDialog.Builder builder;
+    private String culturalComponentsApi ="http://172.31.101.225/finalproject/apis/Select_Cultural_Components.php";
+    private String saveUserProfileApi ="http://172.31.101.225/finalproject/apis/save_profile.php";
+    private String lastRegistrationIdApi ="http://172.31.101.225/finalproject/apis/last_registration_id.php";
+    private String saveUserPreferencesApi ="http://172.31.101.225/finalproject/apis/save_preferences.php";
+    private String lastRegistrationProfileId ="http://172.31.101.225/finalproject/apis/last_profile_id.php";
+    private AlertDialog.Builder builder;
     private Button preferencesBtn;
+    private int lastRegistrationId;
+    private List<Integer> registrationId,profileId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +60,24 @@ public class CulturalComponentsList extends AppCompatActivity {
         recyclerView =(RecyclerView) findViewById(R.id.culturalComponentToInflate);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        loadUrl();
+
+        //calling requestqueue to list our cultiral components
+        loadCulturalComponentsUrl();
+        getLastRegistrationId();
         preferencesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //getLastRegistrationId();
+                isRequestEmpty= recordUserProfile();
+                if(isRequestEmpty) {
+                    Toast.makeText(CulturalComponentsList.this, "Profile Recorded", Toast.LENGTH_SHORT).show();
+                }
 
-                recordUserProfile();
-                Toast.makeText(CulturalComponentsList.this,"Profile Recorded",Toast.LENGTH_SHORT).show();
-                recordUserPreferences();
+                returnLastProfileId();
+                isPreferenceRequestEmpty =recordUserPreferences();
+                if(isPreferenceRequestEmpty){
+                    Toast.makeText(CulturalComponentsList.this, "Preferences Were Recorded ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -77,9 +90,10 @@ public class CulturalComponentsList extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public void loadUrl(){
+    public void loadCulturalComponentsUrl(){
+
         //requesting cultural components from databse
-        StringRequest stringRequest =new StringRequest(Request.Method.GET,apiUrl, new Response.Listener<String>(){
+        StringRequest stringRequest =new StringRequest(Request.Method.GET, culturalComponentsApi, new Response.Listener<String>(){
             @Override
             public void onResponse(String response) {
                 Log.d("Response:", response);
@@ -108,17 +122,89 @@ public class CulturalComponentsList extends AppCompatActivity {
         });
         Volley.newRequestQueue(this).add(stringRequest);
     }
+
+    //searching last registrtion id
+    public int getLastRegistrationId() {
+        //int reg;
+        registrationId=new ArrayList<>();
+        StringRequest request = new StringRequest(Request.Method.GET, lastRegistrationIdApi, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Response: ",response);
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    Log.d("Array:",""+jsonArray);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject regId = jsonArray.getJSONObject(i);
+                        lastRegistrationId = regId.getInt("registration_id");
+                        Log.d("Registration____id",""+ lastRegistrationId);
+                        registrationId.add(regId.getInt("registration_id"));
+
+                        //reg =registration;
+
+                    }
+                    for(int i=0; i<jsonArray.length();i++){
+                        Log.d("List id",""+registrationId.get(i));
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //error message
+                    }
+                });
+        //Log.d("Registration____id",""+ lastRegistrationId);
+        Volley.newRequestQueue(this).add(request);
+        //Toast.makeText(CulturalComponentsList.this,"Registration: "+registration,Toast.LENGTH_LONG).show();
+        return lastRegistrationId;
+    }
+
+
+
         //recording user profile id
-    public void recordUserProfile(){
-        //RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, preferencesUrl, new Response.Listener<String>() {
+    public boolean recordUserProfile(){
+        RequestQueue profileQueue = Volley.newRequestQueue(CulturalComponentsList.this);
+//        StringRequest lastRegistrationIdRequest = new StringRequest(Request.Method.GET, lastRegistrationIdApi, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.d("Response: ",response);
+//                try {
+//                    JSONArray jsonArray = new JSONArray(response);
+//                    Log.d("Array:",""+jsonArray);
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject regId = jsonArray.getJSONObject(i);
+//                        lastRegistrationId = regId.getInt("registration_id");
+//                        Log.d("Registration____id",""+ lastRegistrationId);
+//                        //reg =registration;
+//
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//
+//        },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        //error message
+//                    }
+//                });
+
+
+       StringRequest userProfileIdRequest=new StringRequest(Request.Method.POST, saveUserProfileApi, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    builder.setTitle("Server response");
-                    builder.setMessage("Response " + response);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+//                    builder.setTitle("Server response");
+//                    builder.setMessage("Response " + response);
+//                    AlertDialog dialog = builder.create();
+//                    dialog.show();
 
                 } catch (Exception exception) {
                     exception.printStackTrace();
@@ -132,61 +218,65 @@ public class CulturalComponentsList extends AppCompatActivity {
             }
 
         }){
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             protected Map<String,String> getParams() {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date();
                 Map<String, String> params = new HashMap<>();
-                params.put("registration_id", String.valueOf(getRegid()));
+                params.put("registration_id", String.valueOf(registrationId.get(0)));
                 params.put("registration_date", formatter.format(date));
                 return params;
             }
         };
-        Volley.newRequestQueue(this).add(stringRequest);
+
+
+        //Volley.newRequestQueue(this).add(lastRegistrationIdRequest);
+        //Volley.newRequestQueue(this).add(lastRegistrationIdRequest);
+       boolean isRequestEmpty =(profileQueue.add(userProfileIdRequest))!=null;
+       return isRequestEmpty;
     }
 
 
     //selecting the last registration to use it in linking user
     //profiles with registration
-    int registration;
-    public int getRegid() {
-        StringRequest request = new StringRequest(Request.Method.GET, regIdApi, new Response.Listener<String>() {
+
+    public void returnLastProfileId(){
+        profileId=new ArrayList<>();
+        RequestQueue lastProfileIdQueue =Volley.newRequestQueue(CulturalComponentsList.this);
+        StringRequest lastUserProfileIdRequest=new StringRequest(Request.Method.GET, lastRegistrationProfileId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("Response: ",response);
                 try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    Log.d("Array:",""+jsonArray);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject regId = jsonArray.getJSONObject(i);
-                        registration = regId.getInt("registration_id");
-
+                    JSONArray lastProfileIdArray = new JSONArray(response);
+                    for (int index = 0; index < lastProfileIdArray.length(); index++) {
+                        JSONObject jsonObject = lastProfileIdArray.getJSONObject(index);
+                        profileId.add(jsonObject.getInt("profile_id"));
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                    for (int index = 0; index < lastProfileIdArray.length(); index++) {
+                        Log.d("Profile Id ",""+profileId.get(index));
+                    }
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
                 }
             }
 
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-        Log.d("Registration____id",""+registration);
-        Volley.newRequestQueue(this).add(request);
-        //Toast.makeText(CulturalComponentsList.this,"Registration: "+registration,Toast.LENGTH_LONG).show();
-        return registration;
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //error message
+        }
+    });
+        lastProfileIdQueue.add(lastUserProfileIdRequest);
     }
 
     //recording user preferences
-    public void recordUserPreferences() {
-        StringRequest request = new StringRequest(Request.Method.POST, getPreferenceApi, new Response.Listener<String>() {
+    public boolean recordUserPreferences() {
+        boolean isRequestEmpty;
+        RequestQueue preferencesQueue =Volley.newRequestQueue(CulturalComponentsList.this);
+        StringRequest userPreferencesRequest = new StringRequest(Request.Method.POST, saveUserPreferencesApi, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                //some code here in further analysis
             }
 
         }, new Response.ErrorListener() {
@@ -194,28 +284,30 @@ public class CulturalComponentsList extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 //Error message
                 Toast.makeText(CulturalComponentsList.this, "Error occured", Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+
             }
         }) {
             @Override
-            protected Map<String, String> getParams() {
+            protected Map<String,String> getParams() {
+                Map<String,String> params=null;
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date();
                 List<String> preferences =  CulturalComponentsAdapter.CulturalComponentsHolder.preferencesList();
-                Map<String,String> params =new HashMap<>();
+                Log.d("Preferences Array",""+preferences);
                 for(int i=0; i<preferences.size(); i++){
+                    params =new HashMap<>();
                     params.put("profile_id","1");
                     params.put("item_class",preferences.get(i));
                     params.put("date_of_addition",formatter.format(date));
                     //checking id preferences list is not empty
                     Log.d("Preference:",preferences.get(i));
-
+                    //return params;
                 }
                 return params;
             }
         };
-        Volley.newRequestQueue(this).add(request);
+        isRequestEmpty=((preferencesQueue.add(userPreferencesRequest))!=null);
+        return isRequestEmpty;
     }
-
-
-
 }
