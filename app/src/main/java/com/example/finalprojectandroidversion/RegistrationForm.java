@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 
 
 public class RegistrationForm extends Fragment {
@@ -124,6 +125,7 @@ public class RegistrationForm extends Fragment {
         } else {
             //RequestQueue queue = Volley.newRequestQueue(getActivity());
             StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, response -> {
+
                 builder.setTitle("Server response");
                 builder.setMessage("Response " + response);
                 builder.setPositiveButton("OK", (dialogInterface, iter) -> {
@@ -145,6 +147,7 @@ public class RegistrationForm extends Fragment {
                     params.put("email_address", userEmailAddress);
                     params.put("gender", userGender);
                     params.put("age_range", userAgeRange);
+                    params.put("code", String.valueOf(new Random().nextInt(999999)));
                     Log.i(getActivity().getLocalClassName(), "" + params);
                     return params;
                 }
@@ -160,4 +163,5 @@ public class RegistrationForm extends Fragment {
         startActivity(intent);
 
     }
+
 }

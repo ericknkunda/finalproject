@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -295,15 +296,12 @@ public class CulturalComponentsList extends AppCompatActivity {
                 Date date = new Date();
                 List<String> preferences =  CulturalComponentsAdapter.CulturalComponentsHolder.preferencesList();
                 Log.d("Preferences Array",""+preferences);
-                for(int i=0; i<preferences.size(); i++){
                     params =new HashMap<>();
                     params.put("profile_id","1");
-                    params.put("item_class",preferences.get(i));
+                    params.put("item_class", Arrays.toString(preferences.toArray()));
                     params.put("date_of_addition",formatter.format(date));
                     //checking id preferences list is not empty
-                    Log.d("Preference:",preferences.get(i));
                     //return params;
-                }
                 return params;
             }
         };
