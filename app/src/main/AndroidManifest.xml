@@ -18,6 +18,13 @@
         android:theme="@style/Theme.FinalProjectAndroidVersion"
         tools:targetApi="31">
         <activity
+            android:name=".Verify_Phone_Number"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".CulturalComponentsList"
             android:exported="false">
             <meta-data
@@ -47,7 +54,7 @@
         </activity>
         <activity
             android:name=".AssuranceClass"
-            android:parentActivityName=".intelligentRecommenderSystem"></activity>
+            android:parentActivityName=".intelligentRecommenderSystem" />
     </application>
 
 </manifest>
