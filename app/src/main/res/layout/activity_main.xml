@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".intelligentRecommenderSystem"
-    android:background="@color/white"
+    android:background="@android:color/holo_blue_dark"
+
     android:orientation="vertical">
 
     <TextView
@@ -14,11 +15,13 @@
         android:layout_marginLeft="10dp"
         android:fontFamily="sans-serif"
         android:paddingLeft="10dp"
+        android:textFontWeight="900"
         android:text="@string/welcome"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="italic"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:paddingTop="1dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,15 +35,18 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
         android:text="next"
-        android:textStyle="italic"
-        android:background="@color/white"
+        android:textStyle="bold"
+        android:textFontWeight="1000"
+        android:background="@color/black"
         android:fontFamily="sans-serif"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_marginTop="150dp"
         android:layout_marginLeft="150dp"
-        android:textSize="20sp"
+        android:textSize="30sp"
+
         tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="504dp" />
+        tools:layout_editor_absoluteY="504dp"
+        />
 
 
 </LinearLayout>

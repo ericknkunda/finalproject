@@ -5,20 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".RegistrationHome">
+    tools:context=".RegistrationHome"
+    android:background="@android:color/holo_blue_dark">
+
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        android:text="Register"
-        android:textSize="20sp"
         android:id="@+id/btnRegistration"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_margin="@android:dimen/app_icon_size"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="200dp"
+        android:paddingLeft="10dp"
         android:paddingTop="2dp"
-        android:paddingLeft="10dp"/>
-
+        android:background="@color/black"
+        android:text="Register"
+        android:textSize="39sp"
+        android:textStyle="bold"
+        android:textFontWeight="900"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="266dp"
+        />
 
     <FrameLayout
         android:layout_width="match_parent"
