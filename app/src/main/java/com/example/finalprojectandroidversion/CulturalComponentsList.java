@@ -44,6 +44,7 @@ public class CulturalComponentsList extends AppCompatActivity {
     private String getPreferenceApi="http://192.168.0.104/finalproject/apis/save_preferences.php";
     AlertDialog.Builder builder;
     private Button preferencesBtn;
+    private Button myButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
