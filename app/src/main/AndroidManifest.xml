@@ -18,7 +18,7 @@
         android:theme="@style/Theme.FinalProjectAndroidVersion"
         tools:targetApi="31">
         <activity
-            android:name=".Verify_Phone_Number"
+            android:name=".VerifyPhoneNumber"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

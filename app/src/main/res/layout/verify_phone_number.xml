@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".Verify_Phone_Number">
+    tools:context=".VerifyPhoneNumber">
 
     <EditText
         android:layout_width="wrap_content"

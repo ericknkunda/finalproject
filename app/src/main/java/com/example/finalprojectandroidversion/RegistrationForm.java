@@ -88,7 +88,7 @@ public class RegistrationForm extends Fragment {
         sendToDb.setOnClickListener(view -> {
             sendData();
             Toast.makeText(getActivity(),"Congulatulations",Toast.LENGTH_LONG).show();
-            selectPreference();
+            verifyPhoneNumber();
         });
 
         return view;
@@ -158,8 +158,8 @@ public class RegistrationForm extends Fragment {
         }
         //return  void;
     }
-    public void selectPreference(){
-        Intent intent =new Intent(getActivity(),CulturalComponentsList.class);
+    public void verifyPhoneNumber(){
+        Intent intent =new Intent(getActivity(), VerifyPhoneNumber.class);
         startActivity(intent);
 
     }
