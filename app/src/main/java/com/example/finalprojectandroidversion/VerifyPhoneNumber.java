@@ -23,14 +23,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VerifyPhoneNumber extends AppCompatActivity {
     private Button verifyPhone;
     private EditText codeToVerify;
     private ActionBar actionBar;
-    private  String lastVerCodeApi ="http://172.31.101.225/finalproject/apis/VerificationCode.php";
-    private String verificationCode;
+    private  String lastVerCodeApi ="http://172.17.22.37/finalproject/apis/VerificationCode.php";
+    private String verificationCode[]={""};
+    private  List<String> responseString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,27 +44,53 @@ public class VerifyPhoneNumber extends AppCompatActivity {
         verifyPhone =(Button) findViewById(R.id.btnVerifyPhone);
         actionBar=getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        String codeString =codeToVerify.getText().toString();
-        verificationCode =verifyVerificationCode(lastVerCodeApi);
-        Log.d("Verification code: ",verificationCode);
-        Log.d("Code String: ",codeString);
+//        verifyVerificationCode(lastVerCodeApi);
+//        Log.d("Verification code: ",""+responseString);
 
 
-        //verifyinh if the code really exists
-        verifyPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(codeString==verificationCode){
-                    Toast.makeText(VerifyPhoneNumber.this,"Welcome", Toast.LENGTH_SHORT).show();
-                    startPreferencesList();
+
+            responseString =new ArrayList<>();
+            RequestQueue verificationCodeQueue = Volley.newRequestQueue(VerifyPhoneNumber.this);
+            StringRequest verificationCodeRequest = new StringRequest(Request.Method.GET, lastVerCodeApi, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("Response: ", "" + response);
+                    try {
+                        JSONArray verificationCodeArray = new JSONArray(response);
+                        for (int i = 0; i < verificationCodeArray.length(); i++) {
+                            JSONObject code = verificationCodeArray.getJSONObject(i);
+                            responseString.add(code.getString("Code"));
+                            Log.d("Code Internally", responseString.get(0));
+
+                            verifyPhone.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    String codeString =codeToVerify.getText().toString();
+                                    if(codeString.contains(responseString.get(0))){
+                                        Log.d("Code String: ",codeString);
+                                        Toast.makeText(VerifyPhoneNumber.this,"Welcome", Toast.LENGTH_SHORT).show();
+                                        startPreferencesList();
+                                    }
+                                    else{
+                                        Toast.makeText(VerifyPhoneNumber.this, "Code Not Valid",Toast.LENGTH_SHORT).show();;
+                                    }
+
+                                }
+                            });
+                        }
+                        //return response;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                else{
-                    Toast.makeText(VerifyPhoneNumber.this, "Code Not Valid",Toast.LENGTH_SHORT).show();;
-                }
+                //return response;
+            }, error -> {
+                //error codes;
+            });
 
-            }
-        });
-    }
+            verificationCodeQueue.add(verificationCodeRequest);
+        }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -73,37 +102,14 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     }
 
 
-    String responseString ="";
-    public  String verifyVerificationCode(String url) {
 
-        boolean isPhoneNumberVerified = (false);
-        RequestQueue verificationCodeQueue = Volley.newRequestQueue(VerifyPhoneNumber.this);
-        StringRequest verificationCodeRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("Response: ", "" + response);
-                try {
-                    JSONArray verificationCodeArray = new JSONArray(response);
-                    for (int i = 0; i < verificationCodeArray.length(); i++) {
-                        JSONObject code = verificationCodeArray.getJSONObject(i);
-                        responseString =code.getString("Code").toString();
-//                        if (verificationCode == code.getString("Code")) {
-//                            isPhoneNumberVerified.set(true);
-//                        }
-                    }
-                    //return response;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            //return response;
-        }, error -> {
-            //error codes;
-        });
-
-        verificationCodeQueue.add(verificationCodeRequest);
-        return responseString;
-    }
+//    public  void verifyVerificationCode(String url) {
+//        responseString=new ArrayList<>();
+//        boolean isPhoneNumberVerified = (false);
+//
+////        Log.d("Code Internally above return", responseString[0]);
+////        return responseString[0];
+//    }
 
     public void startPreferencesList(){
         Intent intent =new Intent(getApplicationContext(), CulturalComponentsList.class);
