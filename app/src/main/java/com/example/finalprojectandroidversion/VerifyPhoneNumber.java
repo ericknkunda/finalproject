@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -28,7 +29,8 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     private Button verifyPhone;
     private EditText codeToVerify;
     private ActionBar actionBar;
-    private  String lastVerCodeApi ="http://172.31.101.225/finalproject/apis/VerificationCode";
+    private  String lastVerCodeApi ="http://172.31.101.225/finalproject/apis/VerificationCode.php";
+    private String verificationCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +41,17 @@ public class VerifyPhoneNumber extends AppCompatActivity {
         verifyPhone =(Button) findViewById(R.id.btnVerifyPhone);
         actionBar=getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        String codeString =codeToVerify.getText().toString();
+        verificationCode =verifyVerificationCode(lastVerCodeApi);
+        Log.d("Verification code: ",verificationCode);
+        Log.d("Code String: ",codeString);
 
 
         //verifyinh if the code really exists
         verifyPhone.setOnClickListener(new View.OnClickListener() {
-            String codeString =codeToVerify.toString();
             @Override
             public void onClick(View view) {
-                if(verifyVerificationCode(codeString)==new AtomicBoolean(true)){
+                if(codeString==verificationCode){
                     Toast.makeText(VerifyPhoneNumber.this,"Welcome", Toast.LENGTH_SHORT).show();
                     startPreferencesList();
                 }
@@ -67,28 +72,37 @@ public class VerifyPhoneNumber extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public AtomicBoolean verifyVerificationCode(String verificationCode) {
-        AtomicBoolean isPhoneNumberVerified = new AtomicBoolean(false);
+
+    String responseString ="";
+    public  String verifyVerificationCode(String url) {
+
+        boolean isPhoneNumberVerified = (false);
         RequestQueue verificationCodeQueue = Volley.newRequestQueue(VerifyPhoneNumber.this);
-        StringRequest verificationCodeRequest = new StringRequest(Request.Method.GET, lastVerCodeApi, response -> {
-            Log.d("Response: ", ""+response);
-            try {
-                JSONArray verificationCodeArray = new JSONArray(response);
-                for (int i = 0; i < verificationCodeArray.length(); i++) {
-                    JSONObject code = verificationCodeArray.getJSONObject(i);
-                    if(verificationCode==code.getString("Code")){
-                        isPhoneNumberVerified.set(true);
+        StringRequest verificationCodeRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Response: ", "" + response);
+                try {
+                    JSONArray verificationCodeArray = new JSONArray(response);
+                    for (int i = 0; i < verificationCodeArray.length(); i++) {
+                        JSONObject code = verificationCodeArray.getJSONObject(i);
+                        responseString =code.getString("Code").toString();
+//                        if (verificationCode == code.getString("Code")) {
+//                            isPhoneNumberVerified.set(true);
+//                        }
                     }
+                    //return response;
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+            //return response;
         }, error -> {
             //error codes;
         });
 
         verificationCodeQueue.add(verificationCodeRequest);
-        return isPhoneNumberVerified;
+        return responseString;
     }
 
     public void startPreferencesList(){
