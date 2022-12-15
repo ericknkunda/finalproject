@@ -39,11 +39,11 @@ public class CulturalComponentsList extends AppCompatActivity {
     private CulturalComponentsAdapter componentsAdapter;
     private  boolean isRequestEmpty, isPreferenceRequestEmpty;
     private ActionBar actionBar;
-    private String culturalComponentsApi ="http://172.31.101.225/finalproject/apis/Select_Cultural_Components.php";
-    private String saveUserProfileApi ="http://172.31.101.225/finalproject/apis/save_profile.php";
-    private String lastRegistrationIdApi ="http://172.31.101.225/finalproject/apis/last_registration_id.php";
-    private String saveUserPreferencesApi ="http://172.31.101.225/finalproject/apis/save_preferences.php";
-    private String lastRegistrationProfileId ="http://172.31.101.225/finalproject/apis/last_profile_id.php";
+    private String culturalComponentsApi ="http://1172.17.22.37/finalproject/apis/Select_Cultural_Components.php";
+    private String saveUserProfileApi ="http://172.17.22.37/finalproject/apis/save_profile.php";
+    private String lastRegistrationIdApi ="http://1172.17.22.37/finalproject/apis/last_registration_id.php";
+    private String saveUserPreferencesApi ="http://172.17.22.37/finalproject/apis/save_preferences.php";
+    private String lastRegistrationProfileId ="http://172.17.22.37/finalproject/apis/last_profile_id.php";
     private AlertDialog.Builder builder;
     private Button preferencesBtn;
     private int lastRegistrationId;
@@ -57,7 +57,6 @@ public class CulturalComponentsList extends AppCompatActivity {
         actionBar=getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         preferencesBtn =(Button)findViewById(R.id.savePreferences);
-        modalList =new ArrayList<>();
         recyclerView =(RecyclerView) findViewById(R.id.culturalComponentToInflate);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -92,7 +91,7 @@ public class CulturalComponentsList extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void loadCulturalComponentsUrl(){
-
+        modalList =new ArrayList<>();
         //requesting cultural components from databse
         StringRequest stringRequest =new StringRequest(Request.Method.GET, culturalComponentsApi, new Response.Listener<String>(){
             @Override
