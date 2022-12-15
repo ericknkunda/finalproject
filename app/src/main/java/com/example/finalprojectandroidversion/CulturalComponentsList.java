@@ -45,12 +45,12 @@ public class CulturalComponentsList extends AppCompatActivity {
     private String lastRegistrationProfileId ="http://172.31.101.225/finalproject/apis/last_profile_id.php";
     private AlertDialog.Builder builder;
     private Button preferencesBtn;
-<<<<<<< HEAD
+
     private Button myButton;
-=======
+
     private int lastRegistrationId;
     private List<Integer> registrationId,profileId;
->>>>>>> master
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
