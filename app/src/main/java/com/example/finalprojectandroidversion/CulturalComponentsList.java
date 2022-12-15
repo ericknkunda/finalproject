@@ -59,10 +59,10 @@ public class CulturalComponentsList extends AppCompatActivity {
         preferencesBtn =(Button)findViewById(R.id.savePreferences);
         recyclerView =(RecyclerView) findViewById(R.id.culturalComponentToInflate);
         recyclerView.setHasFixedSize(true);
+        loadCulturalComponentsUrl();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //calling requestqueue to list our cultiral components
-        loadCulturalComponentsUrl();
+        //calling requestqueue to list our cultiral component
         getLastRegistrationId();
         preferencesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
