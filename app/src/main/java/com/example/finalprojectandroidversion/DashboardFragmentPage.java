@@ -28,8 +28,12 @@ public class DashboardFragmentPage extends AppCompatActivity {
         setSupportActionBar(dashboardTitle);
         dashboardFragmentContents =new DashboardFragmentContents();
         dashboardMenus.inflateMenu(R.menu.dashboardmenus);
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+//        actionBar = getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
 
     }
 

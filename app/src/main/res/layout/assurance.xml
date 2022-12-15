@@ -5,6 +5,10 @@
     android:background="@android:color/holo_blue_dark"
     android:orientation="vertical">
 
+    <include
+        layout="@layout/assurancetoolbar"
+        android:id="@+id/assuranceToolbar"/>
+
     <TextView
         android:id="@+id/assuranceTextView"
         android:layout_width="wrap_content"

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,6 +52,7 @@ public class CulturalComponentsList extends AppCompatActivity {
     private Button myButton;
     private int lastRegistrationId;
     private List<Integer> registrationId,profileId;
+    private Toolbar toolbar;
 
 
     @Override
@@ -58,8 +60,16 @@ public class CulturalComponentsList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cultural_components_list);
         this.setTitle("Cultural Components");
-        actionBar=getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar=getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar=(Toolbar) findViewById(R.id.culturalComponentsToolBar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+
         preferencesBtn =(Button)findViewById(R.id.savePreferences);
         recyclerView =(RecyclerView) findViewById(R.id.culturalComponentToInflate);
         recyclerView.setHasFixedSize(true);

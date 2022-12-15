@@ -5,10 +5,14 @@
     <item
         android:id="@+id/viewNotifications"
         android:title="View"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/help"
         android:title="Help"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/aboutUser"
+        android:title="About"
         app:showAsAction="always"/>
 </menu>

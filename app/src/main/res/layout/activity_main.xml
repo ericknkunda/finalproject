@@ -6,8 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".intelligentRecommenderSystem"
     android:background="@android:color/holo_blue_dark"
-
     android:orientation="vertical">
+
+    <include
+        layout="@layout/hometoolbar"
+        android:id="@+id/homeToolBar"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -3,6 +3,7 @@ package com.example.finalprojectandroidversion;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     private  String lastVerCodeApi ="http://172.17.22.37/finalproject/apis/VerificationCode";
     private String verificationCode[]={""};
     private  List<String> responseString;
+    private androidx.appcompat.widget.Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,16 @@ public class VerifyPhoneNumber extends AppCompatActivity {
         this.setTitle("Phone Number Verification");
         codeToVerify=(EditText) findViewById(R.id.txtVerification);
         verifyPhone =(Button) findViewById(R.id.btnVerifyPhone);
-        actionBar=getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar=(androidx.appcompat.widget.Toolbar) findViewById(R.id.codeVerificationToolBar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+
+//        actionBar=getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
 //        verifyVerificationCode(lastVerCodeApi);
 //        Log.d("Verification code: ",""+responseString);
 

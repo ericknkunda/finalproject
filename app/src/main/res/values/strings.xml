@@ -6,6 +6,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome">Welcome to the intelligent recommender system</string>
     <string name="dashboardmessage"> congulatulations. you have reached your dashboard page. happy exploration</string>
+    <string name="loginLabel">Username</string>
+    <string name="passwordLabel">Password</string>
     <string-array name="gender">
         <item>Select</item>
         <item>Male</item>

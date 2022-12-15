@@ -8,24 +8,50 @@
     tools:context=".RegistrationHome"
     android:background="@android:color/holo_blue_dark">
 
+    <include
+        layout="@layout/registrationformtoolbar"
+        android:id="@+id/registrationToolBar"/>
 
-    <Button
-        android:id="@+id/btnRegistration"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_margin="@android:dimen/app_icon_size"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="200dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="2dp"
-        android:background="@color/black"
-        android:text="Register"
-        android:textSize="39sp"
-        android:textStyle="bold"
-        android:textFontWeight="900"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="266dp"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btnRegistration"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_margin="@android:dimen/app_icon_size"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="200dp"
+            android:background="@color/black"
+            android:paddingLeft="3dp"
+            android:paddingTop="2dp"
+            android:text="Register"
+            android:textFontWeight="900"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="266dp" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_margin="@android:dimen/app_icon_size"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="200dp"
+            android:background="@color/black"
+            android:paddingLeft="3dp"
+            android:paddingTop="2dp"
+            android:text="Login"
+            android:textFontWeight="900"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="266dp" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
