@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class CulturalComponentsList extends AppCompatActivity {
     private List<CulturalComponentModal> modalList;
@@ -39,19 +41,17 @@ public class CulturalComponentsList extends AppCompatActivity {
     private CulturalComponentsAdapter componentsAdapter;
     private  boolean isRequestEmpty, isPreferenceRequestEmpty;
     private ActionBar actionBar;
-    private String culturalComponentsApi ="http://1172.17.22.37/finalproject/apis/Select_Cultural_Components.php";
+    private String culturalComponentsApi ="http://172.17.22.37/finalproject/apis/Select_Cultural_Components.php";
     private String saveUserProfileApi ="http://172.17.22.37/finalproject/apis/save_profile.php";
     private String lastRegistrationIdApi ="http://1172.17.22.37/finalproject/apis/last_registration_id.php";
     private String saveUserPreferencesApi ="http://172.17.22.37/finalproject/apis/save_preferences.php";
     private String lastRegistrationProfileId ="http://172.17.22.37/finalproject/apis/last_profile_id.php";
     private AlertDialog.Builder builder;
     private Button preferencesBtn;
-<<<<<<< HEAD
     private Button myButton;
-=======
     private int lastRegistrationId;
     private List<Integer> registrationId,profileId;
->>>>>>> master
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +81,12 @@ public class CulturalComponentsList extends AppCompatActivity {
                 isPreferenceRequestEmpty =recordUserPreferences();
                 if(isPreferenceRequestEmpty){
                     Toast.makeText(CulturalComponentsList.this, "Preferences Were Recorded ", Toast.LENGTH_SHORT).show();
+                    try {
+                        TimeUnit.SECONDS.sleep(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    startActivityDashboard();
                 }
             }
         });
@@ -310,5 +316,12 @@ public class CulturalComponentsList extends AppCompatActivity {
         };
         isRequestEmpty=((preferencesQueue.add(userPreferencesRequest))!=null);
         return isRequestEmpty;
+    }
+
+
+    //starting activity dashboard
+    public void startActivityDashboard(){
+        Intent dashboardIntent =new Intent(getApplicationContext(), DashboardFragmentPage.class);
+        startActivity(dashboardIntent);
     }
 }

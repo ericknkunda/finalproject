@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:background="@color/fragment_colors"
+    android:layout_width="match_parent"
+    android:layout_marginTop="65dp"
+    android:elevation="20dp"
+    android:layout_height="wrap_content">
+
+
+</androidx.appcompat.widget.Toolbar>

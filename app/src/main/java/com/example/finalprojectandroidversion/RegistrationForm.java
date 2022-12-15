@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class RegistrationForm extends Fragment {
@@ -88,6 +89,13 @@ public class RegistrationForm extends Fragment {
         sendToDb.setOnClickListener(view -> {
             sendData();
             Toast.makeText(getActivity(),"Congulatulations",Toast.LENGTH_LONG).show();
+
+            //wait a little bit to fetch last verification code
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             verifyPhoneNumber();
         });
 

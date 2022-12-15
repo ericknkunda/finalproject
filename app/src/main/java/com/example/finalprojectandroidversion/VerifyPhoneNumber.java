@@ -31,7 +31,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     private Button verifyPhone;
     private EditText codeToVerify;
     private ActionBar actionBar;
-    private  String lastVerCodeApi ="http://172.17.22.37/finalproject/apis/VerificationCode.php";
+    private  String lastVerCodeApi ="http://172.17.22.37/finalproject/apis/VerificationCode";
     private String verificationCode[]={""};
     private  List<String> responseString;
 
@@ -47,8 +47,6 @@ public class VerifyPhoneNumber extends AppCompatActivity {
 //        verifyVerificationCode(lastVerCodeApi);
 //        Log.d("Verification code: ",""+responseString);
 
-
-
             responseString =new ArrayList<>();
             RequestQueue verificationCodeQueue = Volley.newRequestQueue(VerifyPhoneNumber.this);
             StringRequest verificationCodeRequest = new StringRequest(Request.Method.GET, lastVerCodeApi, new Response.Listener<String>() {
@@ -60,19 +58,23 @@ public class VerifyPhoneNumber extends AppCompatActivity {
                         for (int i = 0; i < verificationCodeArray.length(); i++) {
                             JSONObject code = verificationCodeArray.getJSONObject(i);
                             responseString.add(code.getString("Code"));
-                            Log.d("Code Internally", responseString.get(0));
+                            Log.d("Code Internally", code.getString("Code"));
 
                             verifyPhone.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     String codeString =codeToVerify.getText().toString();
-                                    if(codeString.contains(responseString.get(0))){
-                                        Log.d("Code String: ",codeString);
-                                        Toast.makeText(VerifyPhoneNumber.this,"Welcome", Toast.LENGTH_SHORT).show();
-                                        startPreferencesList();
-                                    }
-                                    else{
-                                        Toast.makeText(VerifyPhoneNumber.this, "Code Not Valid",Toast.LENGTH_SHORT).show();;
+                                    try {
+                                        if(codeString.contains(code.getString("Code"))){
+                                            Log.d("Code String: ",codeString);
+                                            Toast.makeText(VerifyPhoneNumber.this,"Welcome", Toast.LENGTH_SHORT).show();
+                                            startPreferencesList();
+                                        }
+                                        else{
+                                            Toast.makeText(VerifyPhoneNumber.this, "Code Not Valid",Toast.LENGTH_SHORT).show();;
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
 
                                 }
