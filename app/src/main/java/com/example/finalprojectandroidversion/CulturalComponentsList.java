@@ -27,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,11 +44,13 @@ public class CulturalComponentsList extends AppCompatActivity {
     private CulturalComponentsAdapter componentsAdapter;
     private  boolean isRequestEmpty, isPreferenceRequestEmpty;
     private ActionBar actionBar;
+
     private String culturalComponentsApi ="http://172.17.22.37/finalproject/apis/Select_Cultural_Components.php";
     private String saveUserProfileApi ="http://172.17.22.37/finalproject/apis/save_profile.php";
     private String lastRegistrationIdApi ="http://172.17.22.37/finalproject/apis/last_registration_id.php";
     private String saveUserPreferencesApi ="http://172.17.22.37/finalproject/apis/save_preferences.php";
     private String lastRegistrationProfileId ="http://172.17.22.37/finalproject/apis/last_profile_id.php";
+
     private AlertDialog.Builder builder;
     private Button btnPreferencesAndProfile;
     private int lastRegistrationId;
@@ -55,13 +59,12 @@ public class CulturalComponentsList extends AppCompatActivity {
     private Toolbar toolbarTop;
     Toolbar toolbarDown;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cultural_components_list);
-        this.setTitle("Cultural Components");
-//        actionBar=getSupportActionBar();
+
+        //        actionBar=getSupportActionBar();
 //        actionBar.setDisplayHomeAsUpEnabled(true);
         toolbarTop =(Toolbar) findViewById(R.id.culturalComponentsToolBar);
        //toolbarDown=(Toolbar) findViewById(R.id.savePreferencesToolBar);

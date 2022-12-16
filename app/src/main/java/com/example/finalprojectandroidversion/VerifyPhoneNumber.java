@@ -24,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,7 +34,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     private Button verifyPhone;
     private EditText codeToVerify;
     private ActionBar actionBar;
-    private  String lastVerCodeApi ="http://172.17.22.37/finalproject/apis/VerificationCode";
+    private  String lastVerCodeApi ="http://172.17.22.37/finalproject/apis/VerificationCode";;
     private String verificationCode[]={""};
     private  List<String> responseString;
     private androidx.appcompat.widget.Toolbar toolbar;
@@ -41,6 +43,19 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.verify_phone_number);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    InetAddress ip =InetAddress.getLocalHost();
+                    String ipAddress =ip.getHostAddress();
+
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
         this.setTitle("Phone Number Verification");
         codeToVerify=(EditText) findViewById(R.id.txtVerification);
         verifyPhone =(Button) findViewById(R.id.btnVerifyPhone);

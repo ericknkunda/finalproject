@@ -12,6 +12,7 @@
         \n\nUsername must be a single world without empty spaces.
         \n\nEmail must include @ symbol.
         \n\nPhone number must not be less than 10 digits or grater than 13 digits.</string>
+    <string name="phoneNotUnique">The phone number you provided have been used</string>
     <string-array name="gender">
         <item>Select</item>
         <item>Male</item>
