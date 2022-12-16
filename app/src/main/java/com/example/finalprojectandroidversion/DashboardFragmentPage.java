@@ -50,10 +50,32 @@ public class DashboardFragmentPage extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.preferences:
+                loadRegistrationFragment(new DashboardFragmentContents());
+                break;
+            case R.id.userHistory:
+                loadRegistrationFragment(new DashboardFragmentContents());
+                break;
+            case R.id.userRequest:
+                loadRegistrationFragment(new DashboardFragmentContents());
+                break;
+            case R.id.accountSettings:
+                loadRegistrationFragment(new DashboardFragmentContents());
+                break;
+            case R.id.viewNotifications:
+                loadRegistrationFragment(new DashboardFragmentContents());
+                break;case R.id.help:
+                loadRegistrationFragment(new DashboardFragmentContents());
+                break;
+            case R.id.aboutUser:
+                loadRegistrationFragment(new DashboardFragmentContents());
+                break;
         }
         return super.onOptionsItemSelected(item);
 
     }
+
+
 
     public void loadRegistrationFragment(Fragment fragment){
         FragmentManager manager=getFragmentManager();

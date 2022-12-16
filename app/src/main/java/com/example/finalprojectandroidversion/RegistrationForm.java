@@ -1,5 +1,9 @@
 package com.example.finalprojectandroidversion;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
+import static androidx.core.app.AppOpsManagerCompat.*;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,14 +11,21 @@ import android.os.Bundle;
 import android.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.fragment.app.DialogFragment;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -86,18 +97,25 @@ public class RegistrationForm extends Fragment {
         userAgeRangeSpinner.setAdapter(userAgeRange);
 
         //Volley
-        sendToDb.setOnClickListener(view -> {
-            sendData();
-            Toast.makeText(getActivity(),"Congulatulations",Toast.LENGTH_LONG).show();
-
-            //wait a little bit to fetch last verification code
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        sendToDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean checkFilleds =sendData();
+                if(checkFilleds){
+                    Toast.makeText(getActivity(),"Congulatulations",Toast.LENGTH_LONG).show();
+                    //wait a little bit to fetch last verification code
+                    try {
+                        TimeUnit.SECONDS.sleep(2);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    verifyPhoneNumber();
+                }else{
+                    onButtonShowPopupWindowClick(view);
+                    //getActivity().dismiss
+                }
             }
-            verifyPhoneNumber();
-        });
+        } );
 
         return view;
 
@@ -118,8 +136,8 @@ public class RegistrationForm extends Fragment {
         return this.user;
     }
 
-    public void sendData() {
-        //getting values
+    public boolean sendData() {
+        boolean isAllFilled=false;
         userNames = userName.getText().toString();
         phoneAddress = userPhoneNumber.getText().toString();
         userEmailAddress = userEmail.getText().toString();
@@ -127,11 +145,23 @@ public class RegistrationForm extends Fragment {
         userAgeRange = userAgeRangeSpinner.getSelectedItem().toString();
 
         if (userNames.isEmpty() || phoneAddress.isEmpty()
-                || userEmailAddress.isEmpty() || userGender.equals("Select")||userAgeRange.equals("Select")) {
-            Toast.makeText(getActivity(), "Some fields are empty", Toast.LENGTH_LONG).show();
-            //System.exit(1);
-        } else {
+                || userEmailAddress.isEmpty() || userGender.contains("Select")
+                ||userAgeRange.contains("Select")) {
+            //Toast.makeText(getActivity(), "Some fields are empty", Toast.LENGTH_LONG).show();
+            isAllFilled =false;
+        } else if(userNames.length()<5 || userNames.contains(" ")){
+            isAllFilled=false;
+
+        }
+        else if(phoneAddress.length()<10 || phoneAddress.length()>13){
+            isAllFilled=false;
+        }
+        else if(!(userEmailAddress.contains("@"))){
+            isAllFilled=false;
+        }
+        else {
             //RequestQueue queue = Volley.newRequestQueue(getActivity());
+            isAllFilled =true;
             StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, response -> {
 
                 builder.setTitle("Server response");
@@ -164,12 +194,45 @@ public class RegistrationForm extends Fragment {
             ClassRequestQueue.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
         }
-        //return  void;
+        return  isAllFilled;
     }
     public void verifyPhoneNumber(){
         Intent intent =new Intent(getActivity(), VerifyPhoneNumber.class);
         startActivity(intent);
 
+    }
+
+    public void retainActivity(){
+        Intent intent =new Intent(getActivity(), RegistrationHome.class);
+        startActivity(intent);
+    }
+
+    public void onButtonShowPopupWindowClick(View view) {
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = null;
+            inflater = (LayoutInflater) getActivity(). getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View popupView = inflater.inflate(R.layout.popupmesage, null);
+
+        // create the popup window
+        int width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+        int height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(view, Gravity.CENTER, 10, 0);
+
+        // dismiss the popup window when touched
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                popupWindow.dismiss();
+                return true;
+            }
+        });
     }
 
 }
