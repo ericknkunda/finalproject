@@ -20,8 +20,8 @@ public class LoginPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =inflater.inflate(R.layout.login_page, container, false);
-        login =(Button) view.findViewById(R.id.login);
+        view =inflater.inflate(R.layout.login_layout, container, false);
+        login =(Button) view.findViewById(R.id.cirLoginButton);
          //new activity
 
         login.setOnClickListener(new View.OnClickListener() {

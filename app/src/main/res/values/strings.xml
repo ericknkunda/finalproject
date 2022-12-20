@@ -12,7 +12,15 @@
         \n\nUsername must be a single world without empty spaces.
         \n\nEmail must include @ symbol.
         \n\nPhone number must not be less than 10 digits or grater than 13 digits.</string>
-    <string name="phoneNotUnique">The phone number you provided have been used</string>
+    <string name="phoneNotUnique">The phone number you provided have been used</string><string name="register">REGISTER</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="signup_login_hint">Already have an account? Sign In</string>
+    <string name="login_signup_hint">Don\'t have an account? Sign Up</string>
+    <string name="login_background">login background</string>
+    <string name="todo">TODO</string>
+    <string name="app_snipp">App Snipp</string>
+    <string name="start">start</string>
     <string-array name="gender">
         <item>Select</item>
         <item>Male</item>

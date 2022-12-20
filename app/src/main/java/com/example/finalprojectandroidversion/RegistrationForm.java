@@ -69,10 +69,15 @@ public class RegistrationForm extends Fragment {
     private String userAgeRange;
     private Button sendToDb;
     private View popupView;
-    private String server_url=server_url="http://172.17.22.37/finalproject/apis/tableIUsers.php";;
-    private String getRegisteredUsers=server_url="http://172.17.22.37/finalproject/apis/registered_users.php";;
+    private String server_url=server_url="http://172.17.22.38/finalproject/apis/tableIUsers.php";;
+    private String getRegisteredUsers=server_url="http://172.17.22.38/finalproject/apis/registered_users.php";;
     AlertDialog.Builder builder;
     private final AtomicBoolean isPhoneUnique =new AtomicBoolean(true);
+    boolean placeHolder;
+    static boolean isUnique;
+    boolean takeUniqueVal;
+    boolean isAllFilled=true;
+   static JSONArray registeredUsersArray;
 
     //a linked list to hold users
     private LinkedList<UserAttributesModal> user=new LinkedList<>();
@@ -98,7 +103,8 @@ public class RegistrationForm extends Fragment {
         userNames= userName.getText().toString();
         phoneAddress= userPhoneNumber.getText().toString();
         userEmailAddress= userEmail.getText().toString();
-
+        System.out.println("About to load users...");
+        loadUsers();
 
          //creating a new user
         UserAttributesModal attributes =updateUserToPost(userNames, phoneAddress, userEmailAddress, userGender, userAgeRange);
@@ -116,31 +122,22 @@ public class RegistrationForm extends Fragment {
         ArrayAdapter<CharSequence> userAgeRange =ArrayAdapter.createFromResource(getActivity(),
                 R.array.age_range, android.R.layout.simple_spinner_dropdown_item);
         userAgeRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         userAgeRangeSpinner.setAdapter(userAgeRange);
 
-        //Volley
-        sendToDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean checkFilleds =sendData();
-                Log.d("Value of is all filled",""+sendData());
-                if(checkFilleds==true){
-                    Toast.makeText(getActivity(),"Congulatulations",Toast.LENGTH_LONG).show();
-                    //wait a little bit to fetch last verification code
-                    try {
-                        TimeUnit.SECONDS.sleep(2);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    verifyPhoneNumber();
-                }else{
-                    onButtonShowPopupWindowClick(view);
-                }
+        sendToDb.setOnClickListener(view1 -> {
+            System.out.println("Clicked...");
+            try {
+                sendData();
+                TimeUnit.SECONDS.sleep(2);
+                verifyPhoneNumber();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } );
-
+        });
         return view;
-
     }
 
 
@@ -154,8 +151,25 @@ public class RegistrationForm extends Fragment {
         return this.user;
     }
 
-    public boolean sendData() {
-         boolean isAllFilled = false;
+    private void loadUsers(){
+        System.out.println("Loading users...");
+        RequestQueue registeredUsersQueue = Volley.newRequestQueue(getContext());
+        StringRequest requestRegisteredUsers = new StringRequest(Request.Method.GET, getRegisteredUsers, response -> {
+            System.out.println("Response "+response);
+            try {
+                registeredUsersArray = new JSONArray(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+            System.err.println("Error here "+error);
+            //some codes
+
+        });
+        registeredUsersQueue.add(requestRegisteredUsers);
+
+    }
+    public boolean sendData() throws JSONException {
         //tomicBoolean isAllFilled newfalse;
         userNames = userName.getText().toString();
         phoneAddress = userPhoneNumber.getText().toString();
@@ -163,69 +177,52 @@ public class RegistrationForm extends Fragment {
         userGender = userGenderSpinner.getSelectedItem().toString();
         userAgeRange = userAgeRangeSpinner.getSelectedItem().toString();
 
-        if (userNames.isEmpty() || phoneAddress.isEmpty()
-                || userEmailAddress.isEmpty() || userGender.contains("Select")
-                ||userAgeRange.contains("Select")) {
-            //Toast.makeText(getActivity(), "Some fields are empty", Toast.LENGTH_LONG).show();
-            isAllFilled =false;
-        } else if(userNames.length()<5 || userNames.contains(" ")){
-            isAllFilled=false;
-
-        }
-        else if(phoneAddress.length()<10 || phoneAddress.length()>13){
-            isAllFilled=false;
-        }
-        else if(!(userEmailAddress.contains("@"))){
-            isAllFilled=false;
-        }
-        else {
-            final AtomicBoolean isUnique = new AtomicBoolean(false);
-            //isPhoneUnique.set(Boolean.isUnique);
-                RequestQueue registeredUsersQueue = Volley.newRequestQueue(getActivity());
-                StringRequest requestRegisteredUsers = new StringRequest(Request.Method.GET, getRegisteredUsers, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray registeredUsersArray = new JSONArray(response);
-                            for (int index = 0; index < registeredUsersArray.length(); index++) {
-                                JSONObject object = registeredUsersArray.getJSONObject(index);
-                                if (object.getString("phone") .contains( phoneAddress) || object.getString("email_address") .contains( userEmailAddress)) {
-                                    //onButtonShowPopupWindowClick(popupView);
-                                    isUnique.set(false);
-                                }
-                                else{
-                                    isUnique.set(true);
-
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //some codes
-                    }
-
-                });
-                registeredUsersQueue.add(requestRegisteredUsers);
-                //return  isAllFilled[0];
-            if(!(isUnique.equals(true))) {
-                Log.d("Value of is unique",""+isUnique);
+//        if (userNames.isEmpty() || phoneAddress.isEmpty()
+//                || userEmailAddress.isEmpty() || userGender.contains("Select")
+//                ||userAgeRange.contains("Select")) {
+//            //Toast.makeText(getActivity(), "Some fields are empty", Toast.LENGTH_LONG).show();
+//            isAllFilled =false;
+//        }
+//        if(userNames.length()<5 || userNames.contains(" ")){
+//            isAllFilled=false;
+//
+//        }
+//         if(phoneAddress.length()<10 || phoneAddress.length()>13){
+//            isAllFilled=false;
+//        }
+//        if(!(userEmailAddress.contains("@"))){
+//            isAllFilled=false;
+//        }
+//        System.out.println("Is all filled "+isAllFilled);
+        if(isAllFilled){
+            for(int i=0;i<registeredUsersArray.length();i++){
+                JSONObject object = registeredUsersArray.getJSONObject(i);
+                System.out.println(object);
+            if (object.getString("phone") .contains( phoneAddress) || object.getString("email_address") .contains( String.valueOf( userEmailAddress))) {
+                isUnique=false;
+            }
+            else{
+                isUnique=true;
+            }
+                System.out.println("is unique "+isUnique);
+            }
+            if(isUnique==false) {
+                Log.d("==========================================Value of is unique",""+isUnique);
+                onButtonShowPopupWindowClick(view);
                 return  false;
-            }else{
-                isAllFilled=true;
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, response -> {
+            }
+            else{
 
+                isAllFilled =true;
+                RequestQueue queue =Volley.newRequestQueue(getActivity());
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, response -> {
                     builder.setTitle("Server response");
-                    builder.setMessage("Response " + response);
+                    builder.setMessage("Response Were fetched" );
                     builder.setPositiveButton("OK", (dialogInterface, iter) -> {
                         userName.setText("");
                         userPhoneNumber.setText("");
                         userEmail.setText("");
-//                        userGender.get;
-//                        userAgeRangeSpinner=("";
+
 
                     });
                     AlertDialog dialog = builder.create();
@@ -244,12 +241,14 @@ public class RegistrationForm extends Fragment {
                         return params;
                     }
                 };
-                ClassRequestQueue.getInstance(getActivity()).addToRequestQueue(stringRequest);
-                return  true;
+                queue.add(stringRequest);
+                return isAllFilled;
             }
         }
-        return  isAllFilled;
+        return false;
+
     }
+
 
 
     //verifying phone number
