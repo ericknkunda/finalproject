@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -18,6 +19,7 @@ public class AssuranceClass extends AppCompatActivity {
     private ActionBar actionBar;
     private Button buttonStartRegistrationForm;
     private TextView assuranceTextView;
+    private androidx.appcompat.widget.Toolbar  toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +27,16 @@ public class AssuranceClass extends AppCompatActivity {
         setContentView(R.layout.assurance);
         buttonStartRegistrationForm =(Button) findViewById(R.id.btnStart);
         assuranceTextView=(TextView) findViewById(R.id.assuranceTextView);
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar =(androidx.appcompat.widget.Toolbar) findViewById(R.id.assuranceToolbar);
+        setSupportActionBar(toolbar);
+        //actionBar = getSupportActionBar();
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+
+        //actionBar.setDisplayHomeAsUpEnabled(true);
         buttonStartRegistrationForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

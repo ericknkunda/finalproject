@@ -7,6 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".VerifyPhoneNumber">
 
+    <include
+        layout="@layout/codeverificationtoolbar"
+        android:id="@+id/codeVerificationToolBar"/>
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package com.example.finalprojectandroidversion;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -31,23 +34,43 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     private Button verifyPhone;
     private EditText codeToVerify;
     private ActionBar actionBar;
-    private  String lastVerCodeApi ="http://172.17.22.37/finalproject/apis/VerificationCode.php";
+    private  String lastVerCodeApi ="http://172.17.22.38/finalproject/apis/VerificationCode";;
     private String verificationCode[]={""};
     private  List<String> responseString;
+    private androidx.appcompat.widget.Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.verify_phone_number);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    InetAddress ip =InetAddress.getLocalHost();
+                    String ipAddress =ip.getHostAddress();
+
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
         this.setTitle("Phone Number Verification");
         codeToVerify=(EditText) findViewById(R.id.txtVerification);
         verifyPhone =(Button) findViewById(R.id.btnVerifyPhone);
-        actionBar=getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar=(androidx.appcompat.widget.Toolbar) findViewById(R.id.codeVerificationToolBar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+
+//        actionBar=getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
 //        verifyVerificationCode(lastVerCodeApi);
 //        Log.d("Verification code: ",""+responseString);
-
-
 
             responseString =new ArrayList<>();
             RequestQueue verificationCodeQueue = Volley.newRequestQueue(VerifyPhoneNumber.this);
@@ -60,19 +83,23 @@ public class VerifyPhoneNumber extends AppCompatActivity {
                         for (int i = 0; i < verificationCodeArray.length(); i++) {
                             JSONObject code = verificationCodeArray.getJSONObject(i);
                             responseString.add(code.getString("Code"));
-                            Log.d("Code Internally", responseString.get(0));
+                            Log.d("Code Internally", code.getString("Code"));
 
                             verifyPhone.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     String codeString =codeToVerify.getText().toString();
-                                    if(codeString.contains(responseString.get(0))){
-                                        Log.d("Code String: ",codeString);
-                                        Toast.makeText(VerifyPhoneNumber.this,"Welcome", Toast.LENGTH_SHORT).show();
-                                        startPreferencesList();
-                                    }
-                                    else{
-                                        Toast.makeText(VerifyPhoneNumber.this, "Code Not Valid",Toast.LENGTH_SHORT).show();;
+                                    try {
+                                        if(codeString.contains(code.getString("Code"))){
+                                            Log.d("Code String: ",codeString);
+                                            Toast.makeText(VerifyPhoneNumber.this,"Welcome", Toast.LENGTH_SHORT).show();
+                                            startPreferencesList();
+                                        }
+                                        else{
+                                            Toast.makeText(VerifyPhoneNumber.this, "Code Not Valid",Toast.LENGTH_SHORT).show();;
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
 
                                 }
