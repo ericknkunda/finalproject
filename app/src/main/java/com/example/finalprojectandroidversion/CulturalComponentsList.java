@@ -25,12 +25,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class CulturalComponentsList extends AppCompatActivity {
     private List<CulturalComponentModal> modalList;
@@ -38,52 +42,103 @@ public class CulturalComponentsList extends AppCompatActivity {
     private CulturalComponentsAdapter componentsAdapter;
     private  boolean isRequestEmpty, isPreferenceRequestEmpty;
     private ActionBar actionBar;
-    private String culturalComponentsApi ="http://172.31.101.225/finalproject/apis/Select_Cultural_Components.php";
-    private String saveUserProfileApi ="http://172.31.101.225/finalproject/apis/save_profile.php";
-    private String lastRegistrationIdApi ="http://172.31.101.225/finalproject/apis/last_registration_id.php";
-    private String saveUserPreferencesApi ="http://172.31.101.225/finalproject/apis/save_preferences.php";
-    private String lastRegistrationProfileId ="http://172.31.101.225/finalproject/apis/last_profile_id.php";
+
+    private String culturalComponentsApi ="http://172.17.22.38/finalproject/apis/Select_Cultural_Components.php";
+    private String saveUserProfileApi ="http://172.17.22.38/finalproject/apis/save_profile.php";
+    private String lastRegistrationIdApi ="http://172.17.22.38/finalproject/apis/last_registration_id.php";
+    private String saveUserPreferencesApi ="http:/172.17.22.38/finalproject/apis/save_preferences.php";
+    private String lastRegistrationProfileId ="http://172.17.22.38/finalproject/apis/last_profile_id.php";
+
     private AlertDialog.Builder builder;
-    private Button preferencesBtn;
-
-    private Button myButton;
-
+    private Button btnPreferencesAndProfile;
     private int lastRegistrationId;
-    private List<Integer> registrationId,profileId;
-
+    private List<Integer> registrationId;
+    private List<Integer> profileId;
+    private Toolbar toolbarTop;
+    Toolbar toolbarDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cultural_components_list);
-        this.setTitle("Cultural Components");
-        actionBar=getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        preferencesBtn =(Button)findViewById(R.id.savePreferences);
-        modalList =new ArrayList<>();
+
+        //        actionBar=getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbarTop =(Toolbar) findViewById(R.id.culturalComponentsToolBar);
+       //toolbarDown=(Toolbar) findViewById(R.id.savePreferencesToolBar);
+        setSupportActionBar(toolbarTop);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        //toolbarDown.inflateMenu(R.menu.savepreferencestoolbar);
+        btnPreferencesAndProfile =(Button)findViewById(R.id.savePreferences);
         recyclerView =(RecyclerView) findViewById(R.id.culturalComponentToInflate);
         recyclerView.setHasFixedSize(true);
+        loadCulturalComponentsUrl();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //calling requestqueue to list our cultiral components
-        loadCulturalComponentsUrl();
+        //calling requestqueue to list our cultiral component
         getLastRegistrationId();
-        preferencesBtn.setOnClickListener(new View.OnClickListener() {
+        btnPreferencesAndProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //getLastRegistrationId();
                 isRequestEmpty= recordUserProfile();
                 if(isRequestEmpty) {
                     Toast.makeText(CulturalComponentsList.this, "Profile Recorded", Toast.LENGTH_SHORT).show();
+                    try {
+                        TimeUnit.SECONDS.sleep(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    //requesting this profile id
+                    profileId=new ArrayList<>();
+                    RequestQueue lastProfileIdQueue =Volley.newRequestQueue(CulturalComponentsList.this);
+                    StringRequest lastUserProfileIdRequest=new StringRequest(Request.Method.GET, lastRegistrationProfileId, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONArray lastProfileIdArray = new JSONArray(response);
+                                for (int index = 0; index < lastProfileIdArray.length(); index++) {
+                                    JSONObject jsonObject = lastProfileIdArray.getJSONObject(index);
+                                    setProfileId(jsonObject.getInt("profile_id"));
+                                    isPreferenceRequestEmpty =recordUserPreferences(jsonObject.getInt("profile_id"));
+                                    if(isPreferenceRequestEmpty){
+                                        Toast.makeText(CulturalComponentsList.this, "Preferences Were Recorded ", Toast.LENGTH_SHORT).show();
+                                        try {
+                                            TimeUnit.SECONDS.sleep(3);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        startActivityDashboard();
+                                    }
+
+                                }
+                                for (int index = 0; index < lastProfileIdArray.length(); index++) {
+                                    Log.d("Profile Id ",""+profileId.get(index));
+                                }
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+                        }
+
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //error message
+                        }
+                    });
+                    lastProfileIdQueue.add(lastUserProfileIdRequest);
+                    Log.d("Plofile Id List",""+getProfileId());
+
                 }
 
-                returnLastProfileId();
-                isPreferenceRequestEmpty =recordUserPreferences();
-                if(isPreferenceRequestEmpty){
-                    Toast.makeText(CulturalComponentsList.this, "Preferences Were Recorded ", Toast.LENGTH_SHORT).show();
-                }
             }
         });
+
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -95,7 +150,7 @@ public class CulturalComponentsList extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void loadCulturalComponentsUrl(){
-
+        modalList =new ArrayList<>();
         //requesting cultural components from databse
         StringRequest stringRequest =new StringRequest(Request.Method.GET, culturalComponentsApi, new Response.Listener<String>(){
             @Override
@@ -172,43 +227,13 @@ public class CulturalComponentsList extends AppCompatActivity {
 
         //recording user profile id
     public boolean recordUserProfile(){
+
         RequestQueue profileQueue = Volley.newRequestQueue(CulturalComponentsList.this);
-//        StringRequest lastRegistrationIdRequest = new StringRequest(Request.Method.GET, lastRegistrationIdApi, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                Log.d("Response: ",response);
-//                try {
-//                    JSONArray jsonArray = new JSONArray(response);
-//                    Log.d("Array:",""+jsonArray);
-//                    for (int i = 0; i < jsonArray.length(); i++) {
-//                        JSONObject regId = jsonArray.getJSONObject(i);
-//                        lastRegistrationId = regId.getInt("registration_id");
-//                        Log.d("Registration____id",""+ lastRegistrationId);
-//                        //reg =registration;
-//
-//                    }
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//
-//        },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        //error message
-//                    }
-//                });
-
-
        StringRequest userProfileIdRequest=new StringRequest(Request.Method.POST, saveUserProfileApi, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-//                    builder.setTitle("Server response");
-//                    builder.setMessage("Response " + response);
-//                    AlertDialog dialog = builder.create();
-//                    dialog.show();
+//some codes here
 
                 } catch (Exception exception) {
                     exception.printStackTrace();
@@ -233,9 +258,6 @@ public class CulturalComponentsList extends AppCompatActivity {
             }
         };
 
-
-        //Volley.newRequestQueue(this).add(lastRegistrationIdRequest);
-        //Volley.newRequestQueue(this).add(lastRegistrationIdRequest);
        boolean isRequestEmpty =(profileQueue.add(userProfileIdRequest))!=null;
        return isRequestEmpty;
     }
@@ -244,37 +266,15 @@ public class CulturalComponentsList extends AppCompatActivity {
     //selecting the last registration to use it in linking user
     //profiles with registration
 
-    public void returnLastProfileId(){
-        profileId=new ArrayList<>();
-        RequestQueue lastProfileIdQueue =Volley.newRequestQueue(CulturalComponentsList.this);
-        StringRequest lastUserProfileIdRequest=new StringRequest(Request.Method.GET, lastRegistrationProfileId, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray lastProfileIdArray = new JSONArray(response);
-                    for (int index = 0; index < lastProfileIdArray.length(); index++) {
-                        JSONObject jsonObject = lastProfileIdArray.getJSONObject(index);
-                        profileId.add(jsonObject.getInt("profile_id"));
-                    }
-                    for (int index = 0; index < lastProfileIdArray.length(); index++) {
-                        Log.d("Profile Id ",""+profileId.get(index));
-                    }
-                } catch (JSONException jsonException) {
-                    jsonException.printStackTrace();
-                }
-            }
+    public List<Integer> returnLastProfileId(){
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //error message
-        }
-    });
-        lastProfileIdQueue.add(lastUserProfileIdRequest);
+        //record
+
+        return profileId;
     }
 
     //recording user preferences
-    public boolean recordUserPreferences() {
+    public boolean recordUserPreferences(int profileIdIn) {
         boolean isRequestEmpty;
         RequestQueue preferencesQueue =Volley.newRequestQueue(CulturalComponentsList.this);
         StringRequest userPreferencesRequest = new StringRequest(Request.Method.POST, saveUserPreferencesApi, new Response.Listener<String>() {
@@ -299,19 +299,33 @@ public class CulturalComponentsList extends AppCompatActivity {
                 Date date = new Date();
                 List<String> preferences =  CulturalComponentsAdapter.CulturalComponentsHolder.preferencesList();
                 Log.d("Preferences Array",""+preferences);
-                for(int i=0; i<preferences.size(); i++){
                     params =new HashMap<>();
-                    params.put("profile_id","1");
-                    params.put("item_class",preferences.get(i));
+                    params.put("profile_id",String.valueOf(profileIdIn));
+                    params.put("item_class", Arrays.toString(preferences.toArray()));
                     params.put("date_of_addition",formatter.format(date));
                     //checking id preferences list is not empty
-                    Log.d("Preference:",preferences.get(i));
                     //return params;
-                }
                 return params;
             }
         };
         isRequestEmpty=((preferencesQueue.add(userPreferencesRequest))!=null);
         return isRequestEmpty;
+    }
+
+
+    //starting activity dashboard
+    public void startActivityDashboard(){
+        Intent dashboardIntent =new Intent(getApplicationContext(), DashboardFragmentPage.class);
+        startActivity(dashboardIntent);
+    }
+
+    public void setProfileId(int profileId) {
+        this.profileId.add(profileId);
+    }
+
+    //et this list
+
+    public List<Integer> getProfileId() {
+        return profileId;
     }
 }
