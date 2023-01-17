@@ -34,7 +34,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     private Button verifyPhone;
     private EditText codeToVerify;
     private ActionBar actionBar;
-    private  String lastVerCodeApi ="http://172.17.22.38/finalproject/apis/VerificationCode";;
+    private  String lastVerCodeApi ="http://192.168.43.217/finalproject/apis/VerificationCode";;
     private String verificationCode[]={""};
     private  List<String> responseString;
     private androidx.appcompat.widget.Toolbar toolbar;

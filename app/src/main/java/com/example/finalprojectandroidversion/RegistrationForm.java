@@ -69,8 +69,8 @@ public class RegistrationForm extends Fragment {
     private String userAgeRange;
     private Button sendToDb;
     private View popupView;
-    private String server_url=server_url="http://172.17.22.38/finalproject/apis/tableIUsers.php";;
-    private String getRegisteredUsers=server_url="http://172.17.22.38/finalproject/apis/registered_users.php";;
+    private String server_url="http://192.168.43.217/finalproject/apis/tableIUsers.php";;
+    private String getRegisteredUsers="http://192.168.43.217/finalproject/apis/registered_users.php";;
     AlertDialog.Builder builder;
     private final AtomicBoolean isPhoneUnique =new AtomicBoolean(true);
     boolean placeHolder;
@@ -140,7 +140,6 @@ public class RegistrationForm extends Fragment {
         return view;
     }
 
-
     public UserAttributesModal updateUserToPost(String name, String phone, String email, String gender, String age){
         UserAttributesModal userAttributes =new UserAttributesModal(name, phone, email, gender, age);
         return userAttributes;
@@ -194,26 +193,26 @@ public class RegistrationForm extends Fragment {
 //            isAllFilled=false;
 //        }
 //        System.out.println("Is all filled "+isAllFilled);
-        if(isAllFilled){
-            for(int i=0;i<registeredUsersArray.length();i++){
-                JSONObject object = registeredUsersArray.getJSONObject(i);
-                System.out.println(object);
-            if (object.getString("phone") .contains( phoneAddress) || object.getString("email_address") .contains( String.valueOf( userEmailAddress))) {
-                isUnique=false;
-            }
-            else{
-                isUnique=true;
-            }
-                System.out.println("is unique "+isUnique);
-            }
-            if(isUnique==false) {
-                Log.d("==========================================Value of is unique",""+isUnique);
-                onButtonShowPopupWindowClick(view);
-                return  false;
-            }
-            else{
+//        if(isAllFilled){
+//            for(int i=0;i<registeredUsersArray.length();i++){
+//                JSONObject object = registeredUsersArray.getJSONObject(i);
+//                System.out.println(object);
+//            if (object.getString("phone") .contains( phoneAddress) || object.getString("email_address") .contains( String.valueOf( userEmailAddress))) {
+//                isUnique=false;
+//            }
+//            else{
+//                isUnique=true;
+//            }
+//                System.out.println("is unique "+isUnique);
+//            }
+//            if(isUnique==false) {
+//                Log.d("==========================================Value of is unique",""+isUnique);
+//                onButtonShowPopupWindowClick(view);
+//                return  false;
+//            }
+//            else{
 
-                isAllFilled =true;
+                //isAllFilled =true;
                 RequestQueue queue =Volley.newRequestQueue(getActivity());
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, response -> {
                     builder.setTitle("Server response");
@@ -244,10 +243,10 @@ public class RegistrationForm extends Fragment {
                 queue.add(stringRequest);
                 return isAllFilled;
             }
-        }
-        return false;
-
-    }
+       // }
+//        return false;
+//
+//    }
 
 
 
