@@ -45,11 +45,11 @@ public class CulturalComponentsList extends AppCompatActivity {
     private  boolean isRequestEmpty, isPreferenceRequestEmpty;
     private ActionBar actionBar;
 
-    private String culturalComponentsApi ="http://172.31.101.225/finalproject/apis/Select_Cultural_Components.php";
-    private String saveUserProfileApi ="http://172.31.101.225/finalproject/apis/save_profile.php";
-    private String lastRegistrationIdApi ="http://172.31.101.225/finalproject/apis/last_registration_id.php";
-    private String saveUserPreferencesApi ="http://172.31.101.225/finalproject/apis/save_preferences.php";
-    private String lastRegistrationProfileId ="http://172.31.101.225/finalproject/apis/last_profile_id.php";
+    private String culturalComponentsApi ="http://192.168.43.217/finalproject/apis/Select_Cultural_Components.php";
+    private String saveUserProfileApi ="http://192.168.43.217/finalproject/apis/save_profile.php";
+    private String lastRegistrationIdApi ="http://192.168.43.217/finalproject/apis/last_registration_id.php";
+    private String saveUserPreferencesApi ="http://192.168.43.217/finalproject/apis/save_preferences.php";
+    private String lastRegistrationProfileId ="http://192.168.43.217/finalproject/apis/last_profile_id.php";
 
     private AlertDialog.Builder builder;
     private Button btnPreferencesAndProfile;

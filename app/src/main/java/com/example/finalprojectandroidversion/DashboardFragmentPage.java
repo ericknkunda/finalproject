@@ -70,7 +70,7 @@ public class DashboardFragmentPage extends AppCompatActivity {
                 // code to handle menu item click
                 switch (item.getItemId()) {
                     case R.id.viewNotifications:
-                        loadRegistrationFragment(new DashboardFragmentContents());
+                        loadRegistrationFragment(new preferences_fragment());
                         break;
                     case R.id.help:
                         loadRegistrationFragment(new HelpFragment());

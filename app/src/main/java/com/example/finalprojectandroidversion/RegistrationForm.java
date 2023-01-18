@@ -69,8 +69,8 @@ public class RegistrationForm extends Fragment {
     private String userAgeRange;
     private Button sendToDb;
     private View popupView;
-    private String server_url="http://172.31.101.225/finalproject/apis/tableIUsers.php";;
-    private String getRegisteredUsers="http://172.31.101.225/finalproject/apis/registered_users.php";;
+    private String server_url="http://1192.168.43.217/finalproject/apis/tableIUsers.php";
+    private String getRegisteredUsers="http://192.168.43.217/finalproject/apis/registered_users.php";
     AlertDialog.Builder builder;
     private final AtomicBoolean isPhoneUnique =new AtomicBoolean(true);
     boolean placeHolder;
