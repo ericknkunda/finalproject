@@ -12,7 +12,8 @@
         \n\nUsername must be a single world without empty spaces.
         \n\nEmail must include @ symbol.
         \n\nPhone number must not be less than 10 digits or grater than 13 digits.</string>
-    <string name="phoneNotUnique">The phone number you provided have been used</string><string name="register">REGISTER</string>
+    <string name="phoneNotUnique">The phone number you provided have been used</string>
+    <string name="register">REGISTER</string>
     <string name="login_email_hint">Email</string>
     <string name="login_password_hint">Password</string>
     <string name="signup_login_hint">Already have an account? Sign In</string>
@@ -32,4 +33,7 @@
         <item>Between 16 and 35</item>
         <item>Above 35</item>
     </string-array>
+    <string name="incorect_password">Incorect Password! Try again</string>
+    <string name="help">Email: help.culturerwanda@gmail.com \n Phone: 2233 \n Facebook: culturerwanda</string>
+    <string name="aboutapplication">About App\n\n Version: 1.0\n Last Update : 10/01/2023</string>
 </resources>

@@ -34,7 +34,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     private Button verifyPhone;
     private EditText codeToVerify;
     private ActionBar actionBar;
-    private  String lastVerCodeApi ="http://172.17.22.38/finalproject/apis/VerificationCode";;
+    private  String lastVerCodeApi ="http://192.168.43.217/finalproject/apis/VerificationCode.php";
     private String verificationCode[]={""};
     private  List<String> responseString;
     private androidx.appcompat.widget.Toolbar toolbar;
@@ -44,18 +44,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.verify_phone_number);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    InetAddress ip =InetAddress.getLocalHost();
-                    String ipAddress =ip.getHostAddress();
 
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
         this.setTitle("Phone Number Verification");
         codeToVerify=(EditText) findViewById(R.id.txtVerification);
         verifyPhone =(Button) findViewById(R.id.btnVerifyPhone);
@@ -97,6 +86,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
                                         }
                                         else{
                                             Toast.makeText(VerifyPhoneNumber.this, "Code Not Valid",Toast.LENGTH_SHORT).show();;
+                                            //startPreferencesList();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -139,7 +129,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
 //    }
 
     public void startPreferencesList(){
-        Intent intent =new Intent(getApplicationContext(), CulturalComponentsList.class);
+        Intent intent =new Intent(this, CulturalComponentsList.class);
         startActivity(intent);
     }
 

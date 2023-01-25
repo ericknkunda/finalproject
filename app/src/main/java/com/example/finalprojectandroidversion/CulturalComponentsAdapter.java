@@ -35,7 +35,7 @@ public class CulturalComponentsAdapter extends RecyclerView.Adapter<CulturalComp
     @Override
     public void onBindViewHolder(@NonNull CulturalComponentsAdapter.CulturalComponentsHolder holder, int position) {
         CulturalComponentModal modal=modalList.get(position);
-       String className =modal.getComponentName();
+        String className =modal.getComponentName();
         holder.box.setText(className);
     }
 
